@@ -1,0 +1,62 @@
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
+
+
+<html>
+
+
+<link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<head><title>Home Page</title></head>
+
+{% load extras %}
+
+<body>
+
+<table id="_appendHere" class="table table-striped">
+<tr>
+  <th>DeviceID</th>
+  <th>Timestamp (Unix)</th>
+  <th>Time</th>
+  <th>Temperature</th>
+  <th>Humidity</th>
+  <th>Pressure</th>
+  <th>Soil moisture</th>
+  <th>Color temperature</th>
+  <th>Lux</th>
+  <th>RGB</th>
+</tr>
+
+
+<tr>
+  <td>{{ obj.deviceID}}</td>
+  <td>{{ obj.Time }} </td>
+  <td> TBD </td>
+  <td>{{ obj.Temperature }}</td>
+  <td>{{ obj.Humidity }}</td>
+  <td>{{ obj.Pressure }}</td>
+  <td>{{ obj.Soil }}</td>
+  <td>{{ obj.ColorTemp }}</td>
+  <td>{{ obj.Lux }}</td>
+  <td>{{ obj.RGB }}</td>
+</tr>
+
+
+
+</table>
+
+</body>
+</html>
+
+<style>
+
+table, th, td, h1 {
+text-align: center;
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+

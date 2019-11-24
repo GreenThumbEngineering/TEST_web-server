@@ -1,0 +1,34 @@
+{% load extras %}
+
+<table id="_appendHere" class="table table-striped">
+
+<tr>
+  <th>DeviceID</th>
+  <th>Timestamp (Unix)</th>
+  <th>Time</th>
+  <th>Temperature</th>
+  <th>Humidity</th>
+  <th>Pressure</th>
+  <th>Soil moisture</th>
+  <th>Color temperature</th>
+  <th>Lux</th>
+  <th>RGB</th>
+</tr>
+
+{% for b in obj %}
+<tr>
+  <td>{{ b.deviceID}}</td>
+  <td>{{ b.Time }} </td>
+  <td>{{ b.Time|fromunix}}</td>
+  <td>{{ b.Temperature }}</td>
+  <td>{{ b.Humidity }}</td>
+  <td>{{ b.Pressure }}</td>
+  <td>{{ b.Soil }}</td>
+  <td>{{ b.ColorTemp }}</td>
+  <td>{{ b.Lux }}</td>
+  <td>{{ b.RGB }}</td>
+</tr>
+{% endfor %}
+
+
+</table>

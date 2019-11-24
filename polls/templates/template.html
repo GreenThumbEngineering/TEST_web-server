@@ -1,0 +1,62 @@
+
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
+
+<html>
+
+<link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<head><title>Home Page</title></head>
+
+<body>
+<h1> Green Thumb Engineering </h1>
+
+<table id="_appendHere" class="table table-striped">
+<tr>
+  <th>author</th>
+  <th>title</th>
+  <th>publication year</th>
+</tr>
+
+{% for b in obj %}
+<tr>
+  <td>{{ b.author }}</td>
+  <td>{{ b.title }}</td>
+  <td>{{ b.publication_year }}</td>
+</tr>
+{% endfor %}
+
+
+</table>
+
+</body>
+</html>
+
+<style>
+
+table, th, td, h1 {
+text-align: center;
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script>
+    var append_increment = 0;
+    setInterval(function() {
+        $.ajax({
+            type: "GET",
+            url: {% url 'display' %},  // URL to your view that serves new info
+            data: {'append_increment': append_increment}
+        })
+        .done(function(response) {
+			$('#_appendHere').empty()
+            $('#_appendHere').append(response);
+            append_increment += 10;
+        });
+    }, 10000)
+</script>
+
+
