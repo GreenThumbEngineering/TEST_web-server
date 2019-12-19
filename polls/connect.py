@@ -29,7 +29,7 @@ def getData():
 </omiEnvelope>
 	""")
 
-    req = requests.post("http://82.130.44.157:8080/", data=message)
+    req = requests.post("http://localhost:8080", data=message)
 
 	
     root = ET.fromstring(req.text)
