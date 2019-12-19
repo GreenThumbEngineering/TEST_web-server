@@ -72,5 +72,4 @@ def getData():
         
         i+=1
 
-
-return eachRowAsDictionary
+    return eachRowAsDictionary

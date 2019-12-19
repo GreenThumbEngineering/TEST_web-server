@@ -18,11 +18,12 @@ from django.urls import path
 from django.contrib import admin
 from polls.views import HomeView
 from polls.views import display
+from polls.views import addplant
 #from polls.views import displayplants
 from polls.views import frontpage
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', frontpage, name='frontpage'),
 	url(r'^display/', display, name='display'),
-	#url(r'^displayplants/', displayplants, name='displayplants'),
+	url(r'^addplant/', addplant, name='addplant'),
 ]

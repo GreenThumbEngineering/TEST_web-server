@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>Create a Post </title>
+</head>
+
+<body>
+<h1>Create a Post </h1>
+<form action="" method="POST">
+{% csrf_token %}
+User ID: <input type="text" name="userid"/><br/>
+Nickname: <input type="text" name="nickname"/><br/>
+Device ID: <input type="text" name="deviceid"/><br/>
+<input type="submit" value="Post"/>
+</form>
+</body>
+
+</html>

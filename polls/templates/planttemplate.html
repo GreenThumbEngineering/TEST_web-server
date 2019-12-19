@@ -29,20 +29,20 @@
   <th>RGB</th>
 </tr>
 
-
+{% for b in obj %}
 <tr>
-  <td>{{ obj.deviceID}}</td>
-  <td>{{ obj.Time }} </td>
-  <td> TBD </td>
-  <td>{{ obj.Temperature }}</td>
-  <td>{{ obj.Humidity }}</td>
-  <td>{{ obj.Pressure }}</td>
-  <td>{{ obj.Soil }}</td>
-  <td>{{ obj.ColorTemp }}</td>
-  <td>{{ obj.Lux }}</td>
-  <td>{{ obj.RGB }}</td>
+  <td>{{ b.deviceID}}</td>
+  <td>{{ b.Time }} </td>
+  <td>{{ b.Time|fromunix }} </td>
+  <td>{{ b.Temperature }}</td>
+  <td>{{ b.Humidity }}</td>
+  <td>{{ b.Pressure }}</td>
+  <td>{{ b.Soil }}</td>
+  <td>{{ b.ColorTemp }}</td>
+  <td>{{ b.Lux }}</td>
+  <td>{{ b.RGB }}</td>
 </tr>
-
+{% endfor %}
 
 
 </table>

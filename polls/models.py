@@ -17,4 +17,9 @@ class PlantData(models.Model):
   ColorTemp = models.IntegerField(default=0)
   Lux = models.FloatField(default=0)
   RGB = models.CharField(max_length = 20, default='')
+
+class Plants(models.Model):
+  userid = models.IntegerField()
+  nickname = models.CharField(max_length=30)
+  deviceid = models.CharField(max_length=300, unique=True)
   
