@@ -5,7 +5,6 @@ from django.views.generic import TemplateView
 from .models import Book
 from .models import PlantData
 from .models import Plants
-from django.shortcuts import render_to_response
 from django.utils.datastructures import MultiValueDictKeyError
 from polls import connect
 
@@ -14,7 +13,7 @@ def frontpage(request):
 		return render(request, 'index.html')
 			
 def display(request):		
-		return render_to_response('planttemplate.html', {'obj': connect.getData()})
+		return render('planttemplate.html', {'obj': connect.getData()})
 
 def addplant(request):
 	if request.method == 'POST':
