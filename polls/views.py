@@ -12,7 +12,7 @@ def frontpage(request):
 		return render(request, 'index.html')
 			
 def display(request):		
-		return render('planttemplate.html', {'obj': connect.getData()})
+		return render(request, 'planttemplate.html', {'obj': connect.getData()})
 
 def addplant(request):
 	if request.method == 'POST':
