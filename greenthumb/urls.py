@@ -14,6 +14,7 @@ Including another URLconf
 """
 from django.db import models
 from django.conf.urls import url
+from django.conf.urls import include
 from django.urls import path
 from django.contrib import admin
 from polls.views import HomeView
@@ -21,9 +22,19 @@ from polls.views import display
 from polls.views import addplant
 #from polls.views import displayplants
 from polls.views import frontpage
+
+from polls import views
+app_name = 'dappx'
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', frontpage, name='frontpage'),
 	url(r'^display/', display, name='display'),
 	url(r'^addplant/', addplant, name='addplant'),
+    url(r'^$',views.index,name='index'),
+    url(r'^special/',views.special,name='special'),
+    url(r'^dappx/',include('polls.urls')),
+    url(r'^logout/$', views.user_logout, name='logout'),
+    url(r'^dappx/user_login/planttemplate.html', display, name='display'),
+
 ]
