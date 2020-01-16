@@ -21,9 +21,9 @@ def display(request):
 
 def addplant(request):
 	if request.method == 'POST':
-		if request.POST.get('userid') and request.POST.get('nickname') and request.POST.get('deviceid'):
+		if request.POST.get('nickname') and request.POST.get('deviceid'):
 			plant = Plants()
-			plant.userid = request.POST.get('userid')
+			plant.userid = request.user.id
 			plant.nickname = request.POST.get('nickname')
 			plant.deviceid = request.POST.get('deviceid')
 			plant.save()
