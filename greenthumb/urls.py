@@ -1,40 +1,28 @@
-"""helloworld_project URL Configuration
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.db import models
 from django.conf.urls import url
 from django.conf.urls import include
-from django.urls import path
+from django.urls import path, include
 from django.contrib import admin
 from polls.views import HomeView
 from polls.views import display
 from polls.views import addplant
 #from polls.views import displayplants
 from polls.views import frontpage
-
 from polls import views
+from django.contrib.auth.decorators import login_required
+#from .views import * 
+
 app_name = 'dappx'
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', frontpage, name='frontpage'),
-	url(r'^display/', display, name='display'),
-	url(r'^addplant/', addplant, name='addplant'),
-    url(r'^$',views.index,name='index'),
-    url(r'^special/',views.special,name='special'),
-    url(r'^dappx/',include('polls.urls')),
-    url(r'^logout/$', views.user_logout, name='logout'),
-    url(r'^dappx/user_login/planttemplate.html', display, name='display'),
-
+    path('', include('customuser.urls', namespace='customuser')),
+    path('admin/', admin.site.urls, name="admin"),
+    path('', frontpage, name='frontpage'),
+	path('display/', display, name='display'),
+	path('addplant/', addplant, name='addplant'),
+    #url(r'^$',views.index,name='index'),
+    #url(r'^special/',views.special,name='special'),
+    #url(r'^dappx/',include('polls.urls')),
+    #url(r'^logout/$', views.user_logout, name='logout'),
+    #url(r'^dappx/user_login/planttemplate.html', display, name='display'),
 ]

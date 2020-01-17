@@ -42,8 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'polls',
-	'colorful'
+	'colorful',
+    'customuser',
 ]
+
+AUTH_USER_MODEL = 'customuser.User'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,5 +134,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
-LOGIN_URL = '/polls/user_login/'
-REG_URL = '/polls/register/'

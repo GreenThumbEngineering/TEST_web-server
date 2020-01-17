@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from customuser.models import User as custom_user
 
 
 class Book(models.Model):
@@ -24,7 +24,7 @@ class Plants(models.Model):
   deviceid = models.CharField(max_length=300, unique=True)
   
 class UserProfileInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(custom_user, on_delete=models.CASCADE)
     portfolio_site = models.URLField(blank=True)
     profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
 
