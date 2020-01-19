@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<body>
+			{% if user.is_authenticated %}
+                <h1>Logged in as {{user.email}}</h1>
+                <h1>DeviceID: {{user.deviceID}}</h1>
+				<a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button">Logout</button></a>
+				<form id="logoutform" method="POST" action="{% url 'customuser:logout' %}">
+				{% csrf_token %}
+				<input type="hidden">
+				</form>
+			{% else %}
+				<!-- Log in and sign up -->
+				<div>
+				<a class="button" href="{% url 'customuser:login' %}">Log in</a>
+				</div>
+				<div>
+				<a class="button" href="{% url 'customuser:signup' %}">Sign up</a>
+				</div>
+			{% endif %}
+
+			<div><a class="button" href="{% url 'addplant' %}">Add a plant</a></div>
+	</body>
+</html>

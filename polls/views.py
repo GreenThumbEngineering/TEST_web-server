@@ -7,15 +7,16 @@ from .models import Plants
 from django.utils.datastructures import MultiValueDictKeyError
 from polls import connect
 ###
-from polls.forms import UserForm,UserProfileInfoForm
+from polls.forms import UserForm, UserProfileInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 def frontpage(request):
+        return render(request, 'frontpage.html')
 		#return render(request, 'index.html')
-		return render(request, './logreg/base.html')
+		#return render(request, './logreg/base.html')
 def display(request):		
 		return render(request, 'planttemplate.html', {'obj': connect.getData()})
 
