@@ -1,0 +1,53 @@
+.maincontainer {
+display: flex;
+flex-direction: row;
+flex-wrap: row;
+width: 100%;
+margin-left: 0px !important;
+margin-right: 0px !important;
+justify-content: center;
+}
+
+.imagecontainer {
+    flex-basis: 25%;
+    flex: 1;
+    text-align: center;
+
+}
+
+.tablecontainer {
+    display: flex;
+    flex-basis: 75%;
+    flex: 2;
+}
+
+.caption {
+display: block;
+text-align: center;
+padding-top: 20px;
+}
+
+#chart_div {
+ height: 500px;
+ margin-top: 20px;
+}
+
+
+@media screen and (min-width: 800px) {
+    .imagecontainer {
+      flex: 1
+    }
+  
+    .tablecontainer {
+      flex: 3
+    }
+  }
+
+  @media screen and (max-width: 1605px) {
+   
+    .maincontainer {
+    flex-direction: column;
+    }
+
+  }
+  

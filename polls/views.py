@@ -17,8 +17,11 @@ def frontpage(request):
         return render(request, 'frontpage.html')
 		#return render(request, 'index.html')
 		#return render(request, './logreg/base.html')
-def display(request):		
-		return render(request, 'planttemplate.html', {'obj': connect.getData()})
+def display(request, id):		
+		return render(request, 'planttemplate.html', {'id': id, 'obj': connect.getData(id)})
+
+def myplants(request):		
+		return render(request, 'myplants.html', {'plants': connect.getPlantData(request.user.deviceID)})
 
 def addplant(request):
 	if request.method == 'POST':
