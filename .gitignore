@@ -1,3 +1,8 @@
-### Python ###
-# Byte-compiled / optimized / DLL files
+### Django ###
+*.log
+*.pot
+*.pyc
 __pycache__/
+local_settings.py
+.env
+db.sqlite3
