@@ -4,10 +4,10 @@ from customuser.models import UserManager
 
 class UserManagerTestCase(TestCase):
     
-    def userCreation(self):
+    def test_create_user(self):
         userEmail = "user@email.com"
         userPassword = "1234"
         userId = "123abc"
-        goodUser = UserManager._create_user(BaseUserManager, userId, userEmail, userPassword, False, False)
+        goodUser = UserManager.create_user(userId, userEmail, userPassword)
         self.assertEqual(goodUser.email, userEmail)
 
