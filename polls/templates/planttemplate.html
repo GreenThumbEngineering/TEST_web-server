@@ -52,9 +52,14 @@
 
 </div>
 
+
+
 </div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<div id="soilmoisture_div"></div>
+
 <div id="chart_div"></div>
 
 </body>
@@ -72,19 +77,22 @@ text-align: center;
 
 <script>
 
-var temperatures = [{% for b in obj %} {{b.Temperature}},{% endfor %}].map((elem, index) => [index + 1, elem])
+var temperatures = [{% for b in obj %} {{b.Temperature}},{% endfor %}].map((elem, index) => [- (index - 9), elem])
+var moistures = [{% for b in obj %} {{b.Soil}},{% endfor %}].map((elem, index) => [- (index - 9), elem])
 
 google.charts.load('current', {packages: ['corechart', 'line']});
-google.charts.setOnLoadCallback(drawBackgroundColor);
+google.charts.setOnLoadCallback(drawTemperatures);
+google.charts.setOnLoadCallback(drawSoilMoisture);
 
 $(document).ready(function () {
     $(window).resize(function(){
-      drawBackgroundColor();
+      drawTemperatures();
+      drawSoilMoisture();
     });
 });
 
 
-  function drawBackgroundColor() {
+  function drawTemperatures() {
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'X');
         data.addColumn('number', 'Temperature');
@@ -110,8 +118,34 @@ $(document).ready(function () {
   
         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
         chart.draw(data, options);
-      }
+      };
       
+      function drawSoilMoisture() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'Moisture');
+  
+        data.addRows(moistures);
+  
+        var options = {
+          curveType: 'function',
+
+          hAxis: {
+            title: 'Measurement point',
+            format:'0',
+          },
+          vAxis: {
+            
+            title: 'Moisture',
+            
+          },
+          backgroundColor: '#f1f8e9'
+        };
+  
+        var chart = new google.visualization.LineChart(document.getElementById('soilmoisture_div'));
+        chart.draw(data, options);
+      }
+
       
 
       
