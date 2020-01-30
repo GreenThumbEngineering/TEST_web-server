@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/myplants.css' %}">
+
+<html lang="en">
+	<body>
+		<div class="container">
+			{% for plant in plants %}
+			<div class="plantdiv">
+				<div class="imagecontainer">
+					<img src="/static/images/plant.png" class="img"/>
+				</div>
+				
+				<a href="/myplants/{{ plant }}" class="link">{{ plant }}</a>
+			</div>
+			{% endfor %}
+
+			<div class="plantdiv">
+				<div class="imagecontainer">
+					<img src="/static/images/plant.png" class="img"/>
+				</div>
+				
+				<a href="/addplant/" class="link">Add a new plant</a>
+			</div>
+
+		</div>	
+	</body>
+</html>

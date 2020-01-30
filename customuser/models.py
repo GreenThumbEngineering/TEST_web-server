@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    deviceID = models.CharField(max_length=11, null=False, blank=False)
+    deviceID = models.CharField(max_length=25, null=False, blank=False)
     email = models.EmailField(max_length=254, unique=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

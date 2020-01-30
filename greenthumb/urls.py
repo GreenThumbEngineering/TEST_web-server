@@ -6,6 +6,7 @@ from django.contrib import admin
 from polls.views import HomeView
 from polls.views import display
 from polls.views import addplant
+from polls.views import myplants
 #from polls.views import displayplants
 from polls.views import frontpage
 from polls import views
@@ -18,8 +19,10 @@ urlpatterns = [
     path('', include('customuser.urls', namespace='customuser')),
     path('admin/', admin.site.urls, name="admin"),
     path('', frontpage, name='frontpage'),
-	path('display/', display, name='display'),
+	#path('display/', display, name='display'),
+    path('myplants/', myplants, name='myplants'),
 	path('addplant/', addplant, name='addplant'),
+	path('myplants/<id>', display, name='display')
     #url(r'^$',views.index,name='index'),
     #url(r'^special/',views.special,name='special'),
     #url(r'^dappx/',include('polls.urls')),

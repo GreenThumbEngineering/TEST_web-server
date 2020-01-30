@@ -1,23 +1,27 @@
-<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
-
+{% load static %}
+{% load extras %}
 
 <html>
 
-
-<link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
-
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/planttemplate.css' %}">
 <head><title>Home Page</title></head>
 
-{% load extras %}
 
 <body>
 
+<div class="maincontainer">
+
+<div class="imagecontainer">
+  <img src="/static/images/plant.png" class="img"/>
+  <span class="caption">{{ id }}</span>
+</div>
+
+
+<div class="tablecontainer">
+
 <table id="_appendHere" class="table table-striped">
 <tr>
-  <th>DeviceID</th>
   <th>Timestamp (Unix)</th>
   <th>Time</th>
   <th>Temperature</th>
@@ -31,7 +35,6 @@
 
 {% for b in obj %}
 <tr>
-  <td>{{ b.deviceID}}</td>
   <td>{{ b.Time }} </td>
   <td>{{ b.Time|fromunix }} </td>
   <td>{{ b.Temperature }}</td>
@@ -47,6 +50,13 @@
 
 </table>
 
+</div>
+
+</div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div id="chart_div"></div>
+
 </body>
 </html>
 
@@ -58,5 +68,51 @@ text-align: center;
 
 </style>
 
-<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+<script>
+
+var temperatures = [{% for b in obj %} {{b.Temperature}},{% endfor %}].map((elem, index) => [index + 1, elem])
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawBackgroundColor);
+
+$(document).ready(function () {
+    $(window).resize(function(){
+      drawBackgroundColor();
+    });
+});
+
+
+  function drawBackgroundColor() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'Temperature');
+  
+        data.addRows(temperatures);
+
+
+  
+        var options = {
+          curveType: 'function',
+
+          hAxis: {
+            title: 'Measurement point',
+            format:'0',
+          },
+          vAxis: {
+            
+            title: 'Temperature',
+            
+          },
+          backgroundColor: '#f1f8e9'
+        };
+  
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+      
+      
+
+      
+      </script>
