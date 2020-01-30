@@ -20,21 +20,28 @@ def frontpage(request):
 def display(request, id):		
 		return render(request, 'planttemplate.html', {'id': id, 'obj': connect.getData(id)})
 
-def myplants(request):		
-		return render(request, 'myplants.html', {'plants': connect.getPlantData(request.user.deviceID)})
+
+def myplants(request):
+    if request.user.is_authenticated:		
+        return render(request, 'myplants.html', {'plants': connect.getPlantData(request.user.deviceID)})
+    else:
+        return HttpResponse("You are not logged in !")
 
 def addplant(request):
-	if request.method == 'POST':
-		if request.POST.get('nickname') and request.POST.get('deviceid'):
-			plant = Plants()
-			plant.userid = request.user.id
-			plant.nickname = request.POST.get('nickname')
-			plant.deviceid = request.POST.get('deviceid')
-			plant.save()
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if request.POST.get('nickname') and request.POST.get('deviceid'):
+                plant = Plants()
+                plant.userid = request.user.id
+                plant.nickname = request.POST.get('nickname')
+                plant.deviceid = request.POST.get('deviceid')
+                plant.save()
 
-			return render(request, 'addplant.html')
-	else:
-		return render(request, 'addplant.html')
+                return render(request, 'addplant.html')
+        else:
+            return render(request, 'addplant.html')
+    else:
+        return HttpResponse("You are not logged in !")
 
 ####
 def index(request):
