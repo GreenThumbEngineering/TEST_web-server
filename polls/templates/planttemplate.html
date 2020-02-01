@@ -22,28 +22,26 @@
 
 <table id="_appendHere" class="table table-striped">
 <tr>
-  <th>Timestamp (Unix)</th>
-  <th>Time</th>
   <th>Temperature</th>
   <th>Humidity</th>
-  <th>Pressure</th>
+  <th>DeviceId</th>
+  <th>MeasurementTime</th>
+  <th>ServerTime</th>
   <th>Soil moisture</th>
-  <th>Color temperature</th>
-  <th>Lux</th>
-  <th>RGB</th>
+  <th>SystemId</th>
+  <th>Luminosity</th>
 </tr>
 
-{% for b in obj %}
+{% for datarow in plantdatas %}
 <tr>
-  <td>{{ b.Time }} </td>
-  <td>{{ b.Time|fromunix }} </td>
-  <td>{{ b.Temperature }}</td>
-  <td>{{ b.Humidity }}</td>
-  <td>{{ b.Pressure }}</td>
-  <td>{{ b.Soil }}</td>
-  <td>{{ b.ColorTemp }}</td>
-  <td>{{ b.Lux }}</td>
-  <td>{{ b.RGB }}</td>
+  <td>{{ datarow.Temperature }}</td>
+  <td>{{ datarow.Humidity }}</td>
+  <td>{{ datarow.DeviceId }}</td>
+  <td>{{ datarow.MeasurementTime }}</td>
+  <td>{{ datarow.ServerTime }}</td>
+  <td>{{ datarow.SoilMoisture }}</td>
+  <td>{{ datarow.SystemId }}</td>
+  <td>{{ datarow.Luminosity }}</td>
 </tr>
 {% endfor %}
 
@@ -77,8 +75,8 @@ text-align: center;
 
 <script>
 
-var temperatures = [{% for b in obj %} {{b.Temperature}},{% endfor %}].map((elem, index) => [- (index - 9), elem])
-var moistures = [{% for b in obj %} {{b.Soil}},{% endfor %}].map((elem, index) => [- (index - 9), elem])
+var temperatures = [{% for datarow in plantdatas %} {{ datarow.Temperature }},{% endfor %}].map((elem, index) => [- (index - 9), elem])
+var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}].map((elem, index) => [- (index - 9), elem])
 
 google.charts.load('current', {packages: ['corechart', 'line']});
 google.charts.setOnLoadCallback(drawTemperatures);
