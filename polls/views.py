@@ -26,11 +26,17 @@ def postdata(request):
             hasBeenRegistered = User.objects.filter(deviceID = request.POST.get('SystemId'))
             measurementTime = datetime.fromtimestamp(int(request.POST.get('MeasurementTime')))
             
-            if hasBeenRegistered:               
+            if hasBeenRegistered.count() > 0:               
                 for users in hasBeenRegistered:
                     plants = Plants.objects.filter(userid = users.id)
                     
-                    if request.POST.get('DeviceId') not in list(plants.values('deviceid')):
+                    deviceids = []
+
+                    for plant in plants:
+                        deviceids.append(plant.deviceid)
+
+                    
+                    if request.POST.get('DeviceId') not in deviceids:
                         plant = Plants()
                         plant.userid = users.id
                         plant.nickname = request.POST.get('DeviceId')
