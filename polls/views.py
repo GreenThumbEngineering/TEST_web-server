@@ -1,24 +1,44 @@
 from __future__ import unicode_literals
-from django.shortcuts import render
+from django.shortcuts import render, Http404
 from django.views.generic import TemplateView
-from .models import PlantData
-from .models import Plants
+from .models import PlantData, Plants
+from customuser.models import User
 from django.utils.datastructures import MultiValueDictKeyError
 from polls import connect
-###
+from datetime import datetime
 from polls.forms import UserForm, UserProfileInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.csrf import csrf_exempt
 def frontpage(request):
         return render(request, 'frontpage.html')
 		#return render(request, 'index.html')
 		#return render(request, './logreg/base.html')
+
 def display(request, id):		
 		return render(request, 'planttemplate.html', {'id': id, 'obj': connect.getData(id)})
 
+@csrf_exempt
+def postdata(request):
+    if request.method == "POST":
+        try:
+            systemId = request.POST.get('SystemId')
+            hasBeenRegistered = User.objects.filter(deviceID = request.POST.get('SystemId'))
+            measurementTime = datetime.fromtimestamp(int(request.POST.get('MeasurementTime')))
+            if hasBeenRegistered:
+                plantData = PlantData.objects.create(DeviceId = request.POST.get('DeviceId'), SystemId = request.POST.get('SystemId'), MeasurementTime = measurementTime,   Temperature = float(request.POST.get('Temperature')), Humidity = float(request.POST.get('Humidity')) , SoilMoisture = int(request.POST.get('SoilMoisture')), Luminosity = int(request.POST.get('Luminosity')))
+                plantData.save()
+                return HttpResponse('')
+            else:
+                raise Http404
+            
+        except Exception as e:
+            print(e)
+            raise Http404
+    else:
+        raise Http404
 
 def myplants(request):
     if request.user.is_authenticated:		

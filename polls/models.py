@@ -10,7 +10,7 @@ class PlantData(models.Model):
   Temperature = models.FloatField(default=0)
   Humidity = models.FloatField(default=0)
   SoilMoisture = models.IntegerField(default=0)
-  Luminosity = models.FloatField(default=0)
+  Luminosity = models.IntegerField(default=0)
 
 class Plants(models.Model):
   userid = models.IntegerField()
@@ -18,9 +18,9 @@ class Plants(models.Model):
   deviceid = models.CharField(max_length=300, unique=True)
   
 class UserProfileInfo(models.Model):
-    user = models.OneToOneField(custom_user, on_delete=models.CASCADE)
-    portfolio_site = models.URLField(blank=True)
-    profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
+  user = models.OneToOneField(custom_user, on_delete=models.CASCADE)
+  portfolio_site = models.URLField(blank=True)
+  profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
 
 
 def __str__(self):
