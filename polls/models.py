@@ -15,7 +15,7 @@ class PlantData(models.Model):
 class Plants(models.Model):
   userid = models.IntegerField()
   nickname = models.CharField(max_length=30)
-  deviceid = models.CharField(max_length=300, unique=True)
+  deviceid = models.CharField(max_length=30)
   
 class UserProfileInfo(models.Model):
   user = models.OneToOneField(custom_user, on_delete=models.CASCADE)
