@@ -1,6 +1,25 @@
-<h1>Sign up</h1>
+<!DOCTYPE html>
+
+{% load static %}
+<html lang="en">
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+
+<body>
+
+  <div class="container">
+
+    <div class="loginform">
+
+<span class="logintext">Sign up</span>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">Sign up</button>
+  <button class="button" type="submit">Sign up</button>
 </form>
+
+</div>
+</div>
+
+</body>
+</html>

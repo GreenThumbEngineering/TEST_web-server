@@ -130,7 +130,11 @@ $(document).ready(function () {
 
           hAxis: {
             title: 'Measurement point',
-            format:'0',
+            format:'0.00',
+            viewWindow:{
+              max:30.00,
+              min:0.00
+            } 
           },
           vAxis: {
             

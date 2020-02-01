@@ -1,13 +1,10 @@
 from django.db import models
-from django.conf.urls import url
-from django.conf.urls import include
+from polls import views
+from django.conf.urls import url, include
 from django.urls import path, include
 from django.contrib import admin
-from polls.views import HomeView, display, addplant, myplants, postdata
-from polls.views import frontpage
-from polls import views
+from polls.views import display, addplant, myplants, postdata, frontpage
 from django.contrib.auth.decorators import login_required
-
 
 
 urlpatterns = [
@@ -17,6 +14,6 @@ urlpatterns = [
     path('myplants/', myplants, name='myplants'),
 	path('addplant/', addplant, name='addplant'),
 	path('myplants/<id>', display, name='display'),
-    path('postdata/', postdata, name='display')
+    path('postdata/', postdata, name='postdata')
 
 ]

@@ -1,26 +1,26 @@
 <!DOCTYPE html>
+
+{% load static %}
 <html lang="en">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/frontpage.css' %}">
 	<body>
-			{% if user.is_authenticated %}
-                <h1>Logged in as {{user.email}}</h1>
-                <h1>DeviceID: {{user.deviceID}}</h1>
-				<a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button">Logout</button></a>
-				<form id="logoutform" method="POST" action="{% url 'customuser:logout' %}">
-				{% csrf_token %}
-				<input type="hidden">
-				</form>
-			{% else %}
-				<!-- Log in and sign up -->
-				<div>
-				<a class="button" href="{% url 'customuser:login' %}">Log in</a>
-				</div>
-				<div>
-				<a class="button" href="{% url 'customuser:signup' %}">Sign up</a>
-				</div>
-			{% endif %}
-			
-			
-			<div><a class="button" href="{% url 'myplants' %}">My plants</a></div>
-			<div><a class="button" href="{% url 'addplant' %}">Add a plant</a></div>
+		
+		<div class="container">
+			<div class="leftcolumn">
+				<img src="/static/images/greenthumb.png" class="img"/>
+			</div>
+			<div class="rightcolumn">
+
+					<img id="aalto" src="/static/images/aalto.png">
+
+					<span class="slogan">Join today!</span>
+				
+					<a class="button" href="{% url 'customuser:login' %}">Log in</a>				
+				
+					<a class="button" href="{% url 'customuser:signup' %}">Sign up</a>
+				
+			</div>
+		</div>
 	</body>
 </html>
