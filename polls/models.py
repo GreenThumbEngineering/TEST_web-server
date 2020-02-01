@@ -1,22 +1,16 @@
 from django.db import models
 from customuser.models import User as custom_user
+from datetime import datetime
 
-
-class Book(models.Model):
-  author = models.CharField(max_length = 20)
-  title = models.CharField(max_length = 40)
-  publication_year = models.IntegerField()
-  
 class PlantData(models.Model):
-  deviceID = models.CharField(max_length = 20, default='')
-  Time = models.CharField(max_length = 40, default='')
+  DeviceId = models.CharField(max_length = 20, default='')
+  SystemId = models.CharField(max_length = 20, default='')
+  MeasurementTime = models.DateTimeField(default=datetime.now)
+  ServerTime = models.DateTimeField(default=datetime.now)
   Temperature = models.FloatField(default=0)
   Humidity = models.FloatField(default=0)
-  Pressure = models.FloatField(default=0)
-  Soil = models.IntegerField(default=0)
-  ColorTemp = models.IntegerField(default=0)
-  Lux = models.FloatField(default=0)
-  RGB = models.CharField(max_length = 20, default='')
+  SoilMoisture = models.IntegerField(default=0)
+  Luminosity = models.FloatField(default=0)
 
 class Plants(models.Model):
   userid = models.IntegerField()

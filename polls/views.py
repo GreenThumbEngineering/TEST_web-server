@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .models import Book
 from .models import PlantData
 from .models import Plants
 from django.utils.datastructures import MultiValueDictKeyError
