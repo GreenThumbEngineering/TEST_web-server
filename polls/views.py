@@ -13,6 +13,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 def frontpage(request):
+    if request.user.is_authenticated:
+        return render(request, 'myplants.html', {'plants': Plants.objects.filter(userid=request.user.id)})
+    else: 
         return render(request, 'frontpage.html')
 
 def display(request, id):		
@@ -76,11 +79,3 @@ def addplant(request):
             return render(request, 'addplant.html')
     else:
         return HttpResponse("You are not logged in !")
-
-####
-def index(request):
-    return render(request,'./logreg/index.html')
-
-class HomeView(TemplateView):
-   # template_name = 'index.html'
-	template_name = './logreg/index.html'

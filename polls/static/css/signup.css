@@ -1,76 +1,73 @@
-.card{
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    }
-    
-    
-  input[type=email], input[type=number], input[type=password], input[type=tel], input[type=text], input[type=url], textarea{
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    display: inline-block;
-    min- height: 36px;
-    padding: 8px 12px;
-    width: 100%;
-    margin-top: 5px;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-top: 1px solid #c0c0c0;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -moz-border-radius: 1px;
-    -webkit-border-radius: 1px;
-    border-radius: 1px;
-    font-size: 15px;
-    color: #404040;
-    outline: none;
-    padding-bottom: 10px !important;
-  }
-  
-  input[type='submit'], button, .btn{
-    color: white;
-    text-decoration: none;
-    background-color: rgba(0,0,0, .2);  /* change button color here */
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.6);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.6);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.6);
-    border: 0px;
-    outline: none;
-    display: inline-block;
-    padding: 8px 22px;
-    margin-bottom: 0;
-    font-size: 15px;
-    font-weight: normal;
-    letter-spacing: .12rem;
-    line-height: 1.428571429;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-    margin-top: 10px;
-  }
-  
-  input[type='submit']:hover, button:hover, .btn:hover{
-   background-color: rgba(0,0,0, .3);  /* change button color here */
-  }
-  
-  input[type='submit']:active, button:active, .btn:active{
-    background-color: rgba(0,0,0, .3);  /* change button color here */
-    border: 0px;
-    -webkit-box-shadow: inset 0px 2px 2px 2px rgba(0, 0, 0, .15);
-    box-shadow: inset 0px 2px 2px 2px rgba(0, 0, 0, .15);
-  }
+.container, html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: url(/static/images/frontpage.png) no-repeat center center fixed;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+}
+
+.loginform {
+  padding: 20px;
+  border-radius: 20px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #2e5216;
+}
+
+.logintext {
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #2e5216;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.button {
+  margin-top: 20px;
+  width: 100%;
+  text-decoration: none;
+  background-color: #c6eaae;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 20px;
+  border: 1px solid #2e5216;
+  color: #2e5216;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+  font-weight: bolder;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+input, label {
+  display:block;
+}
+
+label {
+  padding-bottom: 10px;
+}
+
+input {
+  width: 100%;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: groove;
+  border-color: #2e5216;
+  font-size: 20px;
+}
+
+p, input {
+}

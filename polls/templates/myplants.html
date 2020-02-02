@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 
 {% load static %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/myplants.css' %}">
 
 <html lang="en">
 	<body>
+		<div class="logout">
+			<a href="#" onClick="document.getElementById('logoutform').submit()"><button class="button" type="button">Logout</button></a>
+			<form id="logoutform" method="POST" action="{% url 'customuser:logout' %}">
+			{% csrf_token %}
+			<input type="hidden">
+			</form>
+		</div>
+
 		<div class="container">
+
+			
+
 			{% for plant in plants %}
 			<div class="plantdiv">
 				<div class="imagecontainer">
