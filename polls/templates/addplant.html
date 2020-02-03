@@ -1,6 +1,10 @@
 <html>
 
 {% load static %}
+
+
+
+
 <head>
 <title>Add a plant</title>
 </head>
@@ -10,12 +14,14 @@
 <div class="card">
 
 <p class="h1">Add a new plant to system</p>
-<form action="" method="POST">
-{% csrf_token %}
-Nickname: <input type="text" name="nickname"/><br/>
-Device ID: <input type="text" name="deviceid"/><br/>
-<input type="submit" value="Post"/>
+
+
+<form action="{% url 'addplant' %}" method="POST">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Submit">
 </form>
+
 </div>
 
 

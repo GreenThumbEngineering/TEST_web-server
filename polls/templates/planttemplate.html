@@ -1,6 +1,13 @@
 {% load static %}
 {% load extras %}
 
+
+{% load fontawesome_5 %}
+
+{% fontawesome_5_static %}
+
+
+
 <html>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -14,13 +21,13 @@
 
 <div class="imagecontainer">
   <img src="/static/images/plant.png" class="img"/>
-  <span class="caption">{{ id }}</span>
+  <span class="caption">{{ plantinfo.nickname }}<a href="/myplants/{{ plantinfo.id }}/update" class="link"> {% fa5_icon 'pencil-alt' 'fas' %}</a></span>
 </div>
 
 
 <div class="tablecontainer">
 
-<table id="_appendHere" class="table table-striped">
+<table class="table table-striped">
 <tr>
   <th>Temperature</th>
   <th>Humidity</th>
@@ -75,12 +82,23 @@ text-align: center;
 
 <script>
 
-var temperatures = [{% for datarow in plantdatas %} {{ datarow.Temperature }},{% endfor %}].map((elem, index) => [- (index - 9), elem])
-var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}].map((elem, index) => [- (index - 9), elem])
 
-google.charts.load('current', {packages: ['corechart', 'line']});
+
+
+
+
+google.charts.load('current', {packages: ['corechart', 'line', 'controls']});
+google.charts.load('visualization', '1', { packages: ['corechart', 'controls'] });
+
 google.charts.setOnLoadCallback(drawTemperatures);
 google.charts.setOnLoadCallback(drawSoilMoisture);
+
+
+var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}]
+var temperatures = [{% for datarow in plantdatas %} {{ datarow.Temperature }},{% endfor %}]
+
+var dates = {{ dates|safe }}
+
 
 $(document).ready(function () {
     $(window).resize(function(){
@@ -88,23 +106,70 @@ $(document).ready(function () {
       drawSoilMoisture();
     });
 });
-
-
-  function drawTemperatures() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('number', 'X');
-        data.addColumn('number', 'Temperature');
   
-        data.addRows(temperatures);
+      
+      function drawSoilMoisture() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'X');
+        data.addColumn('number', 'Moisture');
 
+        
 
+        var combined = moistures.map(function(e, i) {
+        return [new Date(dates[i]), e];
+        });
+  
+        data.addRows(combined);
+
+        
   
         var options = {
           curveType: 'function',
+          
+          hAxis: {
+            title: 'Measurement point',
+            format: 'HH:mm',
+            
+          },
+
+          
+          vAxis: {
+            
+            title: 'Moisture',
+            
+          },
+          backgroundColor: '#f1f8e9'
+        };
+  
+        var chart = new google.visualization.LineChart(document.getElementById('soilmoisture_div'));
+        chart.draw(data, options);
+      };
+
+      function drawTemperatures() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'X');
+        data.addColumn('number', 'Temperature');
+
+        console.log("test")
+
+        var combined = temperatures.map(function(e, i) {
+        return [new Date(dates[i]), e];
+        });
+  
+        data.addRows(combined);
+
+        
+  
+        var options = {
+          curveType: 'function',
+          
+          
+
 
           hAxis: {
             title: 'Measurement point',
-            format:'0',
+            format: 'HH:mm'
+            
           },
           vAxis: {
             
@@ -117,36 +182,6 @@ $(document).ready(function () {
         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       };
-      
-      function drawSoilMoisture() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('number', 'X');
-        data.addColumn('number', 'Moisture');
-  
-        data.addRows(moistures);
-  
-        var options = {
-          curveType: 'function',
-
-          hAxis: {
-            title: 'Measurement point',
-            format:'0.00',
-            viewWindow:{
-              max:30.00,
-              min:0.00
-            } 
-          },
-          vAxis: {
-            
-            title: 'Moisture',
-            
-          },
-          backgroundColor: '#f1f8e9'
-        };
-  
-        var chart = new google.visualization.LineChart(document.getElementById('soilmoisture_div'));
-        chart.draw(data, options);
-      }
 
       
 

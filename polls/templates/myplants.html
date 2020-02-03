@@ -24,7 +24,12 @@
 					<img src="/static/images/plant.png" class="img"/>
 				</div>
 				
-				<a href="/myplants/{{ plant.deviceid }}" class="link">{{ plant.deviceid }}</a>
+				{% if plant.nickname %}
+				<a href="/myplants/{{ plant.id }}" class="link">{{ plant.nickname }}</a>
+				{% else %}
+				<a href="/myplants/{{ plant.id }}" class="link">{{ plant.deviceid }}</a>
+				{% endif %}
+			
 			</div>
 			{% endfor %}
 
