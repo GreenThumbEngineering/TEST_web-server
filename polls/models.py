@@ -17,6 +17,16 @@ class Plants(models.Model):
   nickname = models.CharField(max_length=20, blank=True)
   deviceid = models.CharField(max_length=20)
   plant_pic = models.ImageField(upload_to='plant_pics', blank=True)
+
+class NDVIMeasurement(models.Model):
+  MeasurementTime = models.DateTimeField(default=datetime.now)
+  Plant = models.ForeignKey(Plants,on_delete=models.CASCADE)
+  NDVI_value = models.FloatField(blank=False)
+
+class Water(models.Model):
+  MeasurementTime = models.DateTimeField(default=datetime.now)
+  Plant = models.ForeignKey(Plants,on_delete=models.CASCADE)
+  WaterAdded = models.FloatField(blank=False)
   
 class UserProfileInfo(models.Model):
   user = models.OneToOneField(custom_user, on_delete=models.CASCADE)

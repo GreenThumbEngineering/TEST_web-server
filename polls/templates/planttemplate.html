@@ -136,7 +136,10 @@ $(document).ready(function () {
           vAxis: {
             
             title: 'Moisture',
-            
+            viewWindow: {
+              max:3500,
+              min:1000
+          }
           },
           backgroundColor: '#f1f8e9'
         };
@@ -172,6 +175,10 @@ $(document).ready(function () {
             
           },
           vAxis: {
+            viewWindow: {
+              max:40,
+              min:-5
+          },
             
             title: 'Temperature',
             

@@ -21,7 +21,7 @@
 			{% for plant in plants %}
 			<div class="plantdiv">
 				<div class="imagecontainer">
-					<img src="/static/images/plant.png" class="img"/>
+					<a href="/myplants/{{ plant.id }}"><img src="/static/images/plant.png" class="img"/></a>
 				</div>
 				
 				{% if plant.nickname %}
@@ -35,7 +35,7 @@
 
 			<div class="plantdiv">
 				<div class="imagecontainer">
-					<img src="/static/images/plant.png" class="img"/>
+					<a href="/addplant/"><img src="/static/images/plus.png" class="img"/></a>
 				</div>
 				
 				<a href="/addplant/" class="link">Add a new plant</a>

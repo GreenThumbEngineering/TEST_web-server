@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 	'colorful',
     'customuser',
     'fontawesome_5',
+    'ai',
 ]
 
 AUTH_USER_MODEL = 'customuser.User'
