@@ -1,4 +1,33 @@
+<html>
+
+{% load static %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/plants_update_form.css' %}">
+
+<head>
+    <title>Update plant</title>
+</head>
+
+<body>
+
+    <div class="container">
+  
+      <div class="loginform">
+
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Update">
+    <input class="button" type="submit" value="Update">
 </form>
+
+
+</div>
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

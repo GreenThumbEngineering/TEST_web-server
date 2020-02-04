@@ -15,7 +15,24 @@ div.plantdiv {
     max-width: 200px;
 	max-height: 800px;
 	background: white;
+	transition: all 0.25s ease-out;
 	
+}
+
+
+.plantdiv:hover {
+	background-color: #7fb05e;
+	border: 2px solid white;
+}
+
+
+.plantdiv a:focus {
+	outline: none;
+}
+
+
+.plantdiv:hover .link {
+	color: white;
 }
 
 div.plantdiv img {
@@ -41,18 +58,14 @@ body {
 	flex-direction: column;
 	align-self: self-end;
 	width: 100%;
-	margin-top: 25px;
+	padding-top: 25px;
+	padding-bottom: 20px;
 	text-align: center;
 	text-decoration: none;
 	color: #526b2d;
 	font-family: Tahoma, Geneva, sans-serif;
 }
 
-.link:hover {
-	background: #D4d4d4;
-	border-radius: 4px;
-	color: #526b2d;
-}
 
 
 

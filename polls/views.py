@@ -89,7 +89,7 @@ def myplants(request):
     if request.user.is_authenticated:
         return render(request, 'myplants.html', {'plants': Plants.objects.filter(user=request.user.id)})
     else:
-        return HttpResponse("You are not logged in !")
+        return redirect('/')
 
 def addplant(request):
     if request.user.is_authenticated:
