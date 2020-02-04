@@ -58,7 +58,7 @@ def postdata(request):
             
             if hasBeenRegistered.count() > 0:               
                 for users in hasBeenRegistered:
-                    plants = Plants.objects.filter(userid = users.id)
+                    plants = Plants.objects.filter(user_id = users.id)
                     
                     deviceids = []
 
