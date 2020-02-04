@@ -68,7 +68,7 @@ def postdata(request):
                     
                     if request.POST.get('DeviceId') not in deviceids:
                         plant = Plants()
-                        plant.userid = users.id
+                        plant.user_id = users.id
                         plant.nickname = request.POST.get('DeviceId')
                         plant.deviceid = request.POST.get('DeviceId')
                         plant.save()
