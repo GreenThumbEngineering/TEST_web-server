@@ -4,22 +4,49 @@ from django.views.generic import TemplateView
 from .models import PlantData, Plants
 from customuser.models import User
 from django.utils.datastructures import MultiValueDictKeyError
-from datetime import datetime
+from datetime import datetime, timedelta
 from polls.forms import UserForm, UserProfileInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+import json
+from .forms import PlantsForm
+from django.shortcuts import redirect
+from django.views.generic.edit import UpdateView
+from django.urls import reverse_lazy
+
+class PlantUpdate(UpdateView):
+    model = Plants
+    fields = ['nickname', 'plant_pic']
+    template_name_suffix = '_update_form'
+    success_url = "/myplants/{id}"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not (self.request.user == self.get_object().user):
+            raise Http404
+        return super(UpdateView, self).dispatch(request, *args, **kwargs)
 
 def frontpage(request):
     if request.user.is_authenticated:
-        return render(request, 'myplants.html', {'plants': Plants.objects.filter(userid=request.user.id)})
+        return render(request, 'myplants.html', {'plants': Plants.objects.filter(user=request.user)})
     else: 
         return render(request, 'frontpage.html')
 
-def display(request, id):		
-		return render(request, 'planttemplate.html', {'id': id, 'plantdatas': PlantData.objects.filter(DeviceId=id)})
+def display(request, id):
+    time_threshold = datetime.now() - timedelta(hours=24)
+    plantinfo = Plants.objects.filter(user=request.user).get(id=id)
+
+    datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).filter(ServerTime__gt=time_threshold)
+    plantinfo = Plants.objects.filter(user=request.user).get(id=id)
+
+    dates = []
+
+    for plant in datas:
+        dates.append(str(plant.ServerTime))
+
+    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'dates': dates})
 
 @csrf_exempt
 def postdata(request):
@@ -60,22 +87,20 @@ def postdata(request):
 
 def myplants(request):
     if request.user.is_authenticated:
-        return render(request, 'myplants.html', {'plants': Plants.objects.filter(userid=request.user.id)})
+        return render(request, 'myplants.html', {'plants': Plants.objects.filter(user=request.user.id)})
     else:
         return HttpResponse("You are not logged in !")
 
 def addplant(request):
     if request.user.is_authenticated:
-        if request.method == 'POST':
-            if request.POST.get('nickname') and request.POST.get('deviceid'):
-                plant = Plants()
-                plant.userid = request.user.id
-                plant.nickname = request.POST.get('nickname')
-                plant.deviceid = request.POST.get('deviceid')
-                plant.save()
+        if request.method == 'POST':           
+            form = PlantsForm(request.POST)
+            if form.is_valid():
+                form.instance.user = request.user
 
-                return render(request, 'addplant.html')
+                form.save()
+                return redirect('myplants')
         else:
-            return render(request, 'addplant.html')
-    else:
-        return HttpResponse("You are not logged in !")
+            form = PlantsForm()
+        
+        return render(request, 'addplant.html', {'form': form})

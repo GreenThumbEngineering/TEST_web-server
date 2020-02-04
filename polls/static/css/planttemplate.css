@@ -11,15 +11,26 @@ body {
   background: transparent;
 }
 
+.tablecontainer {
+  overflow:hidden;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  height: 602px;
+}
+
+link:hover {
+  text-decoration: none;
+}
+
 .maincontainer {
-background: transparent;
-display: flex;
-flex-direction: row;
-flex-wrap: row;
-width: 100%;
-margin-left: 0px !important;
-margin-right: 0px !important;
-justify-content: center;
+  background: transparent;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: row;
+  width: 100%;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  justify-content: center;
 }
 
 .imagecontainer {
@@ -41,6 +52,7 @@ justify-content: center;
     border-radius: 10px;
     margin: 10px;
     border: 2px solid #e1e4e8 !important;
+    justify-content: center;
 }
 
 .caption {
