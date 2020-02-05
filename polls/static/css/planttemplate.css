@@ -93,7 +93,6 @@ text-align: center;
   border-radius: 10px;
   margin: 10px;
   border: 2px solid #e1e4e8 !important;
-  font-size: 0.8vw !important;
   height: 602px;
 }
 
@@ -108,13 +107,6 @@ text-align: center;
   padding: 0px !important;
   min-height: 50px;
   background-color: #f1f8e9;
-}
-
-
-
-
-#tabcontainer #data_div table {
-  font-size: 0.8vw !important;
 }
 
 
