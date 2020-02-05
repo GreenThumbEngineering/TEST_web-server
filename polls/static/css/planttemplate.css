@@ -1,6 +1,8 @@
 html {
   background: url(/static/images/background1.jpg) no-repeat center center fixed; 
   background-size: cover;
+  overflow-y: scroll;
+  
 }
 
 body {
@@ -42,6 +44,14 @@ link:hover {
 
 }
 
+
+
+table, th, td, h1 {
+text-align: center;
+}
+
+
+
 .tablecontainer {
   display: flex;
   flex-basis: 75%;
@@ -62,26 +72,66 @@ link:hover {
 
 #temperature_div, #humidity_div, #soilmoisture_div, #luminosity_div {
   height: 500px;
-  background-color: white;
-  border-radius: 10px;
-  margin: 10px;
+  background-color: #f1f8e9;
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   border: 2px solid #e1e4e8 !important;
   display: none;
 }
 .selected_button {
   background: -webkit-linear-gradient(top,#3a3a3a,#ccc) !important;
 }
+
+#charts_div {
+  overflow:auto;
+}
+
+
+
+
+#chart_selection_div {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#charts_container{
+  width: 100%;
+  overflow:auto;
+}
+
 #chart_selection_div li{
   text-align: center;
   list-style-type: none;
+  flex: 1;
+  display: flex;
+
   
 }
 
+#multiselect_button{
+border-radius: 10px 0 0 0;
+}
+
+#luminosity_button{
+  border-radius: 0 10px 0 0;
+  }
+
+
 
 #chart_selection_div li Button {
-  margin: 10px;
 
+  margin-top: 10px;
+  flex: 1;
+  padding: 0px !important;
+  min-height: 50px;
+  background-color: #f1f8e9;
 }
+
+
 
 @media screen and (min-width: 800px) {
     .imagecontainer {
