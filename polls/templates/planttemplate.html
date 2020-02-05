@@ -22,6 +22,18 @@
 <div class="imagecontainer">
   <img src="/static/images/plant.png" class="img"/>
   <span class="caption">{{ plantinfo.nickname }}<a href="/myplants/{{ plantinfo.id }}/update" class="link"> {% fa5_icon 'pencil-alt' 'fas' %}</a></span>
+<form method="post">
+    {% csrf_token %}
+    {{ ndviform }}
+    <input type="submit" value="Submit">
+</form>
+
+<form method="post">
+  {% csrf_token %}
+  {{ waterform }}
+  <input type="submit" value="Submit">
+</form>
+
 </div>
 
 
@@ -65,10 +77,10 @@
 
 <div id="chart_selection_div">
   <li id="chart_selection_list">
-    <Button id="multiselect_button" onClick="multiSelectSwitch()">Multiselect {% fa5_icon 'object-ungroup' 'fas' %}</Button>
+    <Button id="multiselect_button" onClick="multiSelectSwitch()">Select multiple {% fa5_icon 'object-ungroup' 'fas' %}</Button>
     <Button id="temperature_button" onClick="selectChart('temperature_div')">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</Button>
     <Button id="humidity_button" onClick="selectChart('humidity_div')">Humidity {% fa5_icon 'wind' 'fas' %}</Button>
-    <Button id="soilmoisture_button" onClick="selectChart('soilmoisture_div')">Soil Moisture {% fa5_icon 'tint' 'fas' %}</Button>
+    <Button id="soilmoisture_button" onClick="selectChart('soilmoisture_div')">Soil moisture {% fa5_icon 'tint' 'fas' %}</Button>
     <Button id="luminosity_button" onClick="selectChart('luminosity_div')">Luminosity {% fa5_icon 'sun' 'fas' %}</Button>
   </li>
  
@@ -195,15 +207,19 @@ function multiSelectSwitch() {
 }
 
 
-$(document).ready(function () {
-    selectChart("temperature_div");
+$(document).ready(function () { 
     $(window).resize(function(){
       drawTemperatures();
       drawHumidities();
       drawSoilMoistures();
       drawLuminosities();
     });
+
+    selectChart("temperature_div");
 });
+
+
+
 
       
       function drawSoilMoistures() {
@@ -249,7 +265,7 @@ $(document).ready(function () {
       function drawTemperatures() {
         var data = new google.visualization.DataTable();
         data.addColumn('datetime', 'X');
-        data.addColumn('number', 'Temperature(C)');
+        data.addColumn('number', 'Temperature (°C)');
 
 
         var combined = temperatures.map(function(e, i) {
@@ -277,7 +293,7 @@ $(document).ready(function () {
               min:-5
           },
             
-            title: 'Temperature(C)',
+            title: 'Temperature (°C)',
             
           },
           backgroundColor: 'transparent'
@@ -316,8 +332,8 @@ $(document).ready(function () {
             
             title: 'Luminosity',
             viewWindow: {
-              max:4095,
-              min:1000,
+              max:300,
+              min:0,
           }
           },
           backgroundColor: 'transparent'
@@ -330,7 +346,7 @@ $(document).ready(function () {
       function drawHumidities() {
         var data = new google.visualization.DataTable();
         data.addColumn('datetime', 'X');
-        data.addColumn('number', 'Humidity(%)');
+        data.addColumn('number', 'Humidity (%)');
 
         
 
@@ -354,7 +370,7 @@ $(document).ready(function () {
           
           vAxis: {
             
-            title: 'Humidity',
+            title: 'Humidity (%)',
             viewWindow: {
               max:100,
               min:0,

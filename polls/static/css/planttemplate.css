@@ -60,8 +60,13 @@ text-align: center;
   border-radius: 10px;
   margin: 10px;
   border: 2px solid #e1e4e8 !important;
-  justify-content: center;
+  font-size: 0.8vw !important;
 }
+
+.tablecontainer table {
+  font-size: 0.8vw !important;
+}
+
 
 .caption {
   display: block;
@@ -81,11 +86,12 @@ text-align: center;
   display: none;
 }
 .selected_button {
-  background: -webkit-linear-gradient(top,#3a3a3a,#ccc) !important;
+  background: linear-gradient(#526b2d,#f1f8e9) !important;
 }
 
 #charts_div {
   overflow:auto;
+
 }
 
 
@@ -131,6 +137,9 @@ border-radius: 10px 0 0 0;
   background-color: #f1f8e9;
 }
 
+#chart_selection_div li Button:focus {
+  outline: none;
+}
 
 
 @media screen and (min-width: 800px) {
