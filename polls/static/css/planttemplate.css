@@ -1,8 +1,6 @@
 html {
   background: url(/static/images/background1.jpg) no-repeat center center fixed; 
-
   background-size: cover;
-  
 }
 
 body {
@@ -34,42 +32,56 @@ link:hover {
 }
 
 .imagecontainer {
-    flex-basis: 25%;
-    flex: 1;
-    text-align: center;
-    background-color: #f1f8e9;
-    border-radius: 10px;
-    margin: 10px;
-    border: 2px solid #e1e4e8 !important;
+  flex-basis: 25%;
+  flex: 1;
+  text-align: center;
+  background-color: #f1f8e9;
+  border-radius: 10px;
+  margin: 10px;
+  border: 2px solid #e1e4e8 !important;
 
 }
 
 .tablecontainer {
-    display: flex;
-    flex-basis: 75%;
-    flex: 2;
-    background-color: white;
-    border-radius: 10px;
-    margin: 10px;
-    border: 2px solid #e1e4e8 !important;
-    justify-content: center;
+  display: flex;
+  flex-basis: 75%;
+  flex: 2;
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px;
+  border: 2px solid #e1e4e8 !important;
+  justify-content: center;
 }
 
 .caption {
-display: block;
-text-align: center;
-padding-top: 20px;
-padding-bottom: 20px;
+  display: block;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-#chart_div, #soilmoisture_div {
- height: 500px;
- background-color: white;
-    border-radius: 10px;
-    margin: 10px;
-    border: 2px solid #e1e4e8 !important;
+#temperature_div, #humidity_div, #soilmoisture_div, #luminosity_div {
+  height: 500px;
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px;
+  border: 2px solid #e1e4e8 !important;
+  display: none;
+}
+.selected_button {
+  background: -webkit-linear-gradient(top,#3a3a3a,#ccc) !important;
+}
+#chart_selection_div li{
+  text-align: center;
+  list-style-type: none;
+  
 }
 
+
+#chart_selection_div li Button {
+  margin: 10px;
+
+}
 
 @media screen and (min-width: 800px) {
     .imagecontainer {
