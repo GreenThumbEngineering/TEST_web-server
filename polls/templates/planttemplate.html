@@ -21,21 +21,27 @@
 
 <div class="imagecontainer">
   <img src="/static/images/plant.png" class="img"/>
+  <div class="captioncontainer">
   <span class="caption">{{ plantinfo.nickname }}<a href="/myplants/{{ plantinfo.id }}/update" class="link"> {% fa5_icon 'pencil-alt' 'fas' %}</a></span>
-
+  </div>
 
 </div>
 
-<div id="tab_selection_div">
-  <li id="tab_selection_list">
-    <Button id="data_button" onClick="selectTab('data')">View data{% fa5_icon 'database' 'fas' %}</Button>
-    <Button id="forms_button" onClick="selectTab('forms')">Add water/NDVI {% fa5_icon 'wpforms' 'fab' %}</Button>
-    <Button id="predictions_button" onClick="selectTab('ai')">Predictions {% fa5_icon 'robot' 'fas' %}</Button>
-  </li>
- 
-</div>
+
+
+
 
 <div id="tabcontainer">
+  <div id="tab_selection_div">
+    <li id="tab_selection_list">
+      <Button id="data_button" onClick="selectTab('data')">View data {% fa5_icon 'database' 'fas' %}</Button>
+      <Button id="forms_button" onClick="selectTab('forms')">Add water/NDVI {% fa5_icon 'wpforms' 'fab' %}</Button>
+      <Button id="predictions_button" onClick="selectTab('ai')">Predictions {% fa5_icon 'robot' 'fas' %}</Button>
+    </li>
+  </div>
+
+  <div id="tabs_div">
+
   <div id="data_div">
     <table class="table table-striped">
       <tr>
@@ -63,6 +69,7 @@
       {% endfor %}
     </table>
   </div>
+
   <div id="forms_div">
     <form method="post">
       {% csrf_token %}
@@ -76,24 +83,61 @@
       <input type="submit" value="Submit">
     </form>
   </div>
+  
   <div id="predictions_div">
-    <p>THIS DIV REPRESENTS PREDICTIONS MADE BY AI: PÄLÄLÄLÄLÄLÄLÄLÄLÄLÄLÄLÄASDASÄLDASÄDLASÄDLASÄDLSAÄDLSADÄ
-      SADASD124 
-      ASD214 
-      ASD §
-      ASD
-      ASD21       4123
-    </p>
+    <p>We hope this might contain something one day</p>
   </div>
 
+
 </div>
+</div>
+
+</div>
+
+<div id="chart_container">
+
+<div id="chart_selection_div">
+  <li id="chart_selection_list">
+    <Button id="multiselect_button" onClick="multiSelectSwitch()">Select multiple {% fa5_icon 'object-ungroup' 'fas' %}</Button>
+    <Button id="temperature_button" onClick="selectChart('temperature_div')">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</Button>
+    <Button id="humidity_button" onClick="selectChart('humidity_div')">Humidity {% fa5_icon 'wind' 'fas' %}</Button>
+    <Button id="soilmoisture_button" onClick="selectChart('soilmoisture_div')">Soil moisture {% fa5_icon 'tint' 'fas' %}</Button>
+    <Button id="luminosity_button" onClick="selectChart('luminosity_div')">Luminosity {% fa5_icon 'sun' 'fas' %}</Button>
+    <Button id="ndvi_button" onClick="selectChart('ndvi_div')">NDVI {% fa5_icon 'search' 'fas' %}</Button>
+  </li>
+ 
+</div>
+
+<div id="charts_div">
+  <div id="temperature_div"></div>
+
+  <div id="humidity_div"></div>
+
+  <div id="soilmoisture_div"></div>
+
+  <div id="luminosity_div"></div>
+
+  <div id="ndvi_div"></div>
+</div>
+
+</div>
+
+</body>
+</html>
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
 <script type="text/javascript">
   function clearSelectedTabs() {
     var buttons = document.getElementById("tab_selection_list").children;
     for(var i = 0; i < buttons.length; i++){
       buttons[i].classList.remove("selected_button");
     }
-    var divs = document.getElementById("tabcontainer").children;
+    var divs = document.getElementById("tabs_div").children;
     for(var i = 0; i < divs.length; i++){
       divs[i].style.display = "none";
     }
@@ -120,46 +164,7 @@
     
   }
 
-  
-</script>
-
-
-</div>
-
-<div id="chart_container">
-
-<div id="chart_selection_div">
-  <li id="chart_selection_list">
-    <Button id="multiselect_button" onClick="multiSelectSwitch()">Select multiple {% fa5_icon 'object-ungroup' 'fas' %}</Button>
-    <Button id="temperature_button" onClick="selectChart('temperature_div')">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</Button>
-    <Button id="humidity_button" onClick="selectChart('humidity_div')">Humidity {% fa5_icon 'wind' 'fas' %}</Button>
-    <Button id="soilmoisture_button" onClick="selectChart('soilmoisture_div')">Soil moisture {% fa5_icon 'tint' 'fas' %}</Button>
-    <Button id="luminosity_button" onClick="selectChart('luminosity_div')">Luminosity {% fa5_icon 'sun' 'fas' %}</Button>
-  </li>
- 
-</div>
-
-<div id="charts_div">
-  <div id="temperature_div"></div>
-
-  <div id="humidity_div"></div>
-
-  <div id="soilmoisture_div"></div>
-
-  <div id="luminosity_div"></div>
-</div>
-
-</div>
-
-</body>
-</html>
-
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-<script>
+  /*-----------------------------------------------*/
 
 
 google.charts.load('current', {packages: ['corechart', 'line', 'controls']});
@@ -169,13 +174,15 @@ google.charts.setOnLoadCallback(drawTemperatures);
 google.charts.setOnLoadCallback(drawHumidities);
 google.charts.setOnLoadCallback(drawSoilMoistures);
 google.charts.setOnLoadCallback(drawLuminosities);
+google.charts.setOnLoadCallback(drawNDVI);
 
 var temperatures = [{% for datarow in plantdatas %} {{ datarow.Temperature }},{% endfor %}]
 var humidities = [{% for datarow in plantdatas %} {{ datarow.Humidity }},{% endfor %}]
 var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}]
 var luminosities = [{% for datarow in plantdatas %} {{ datarow.Luminosity }},{% endfor %}]
+var ndvis = [{% for datarow in ndvidata %} {{ datarow.NDVI_value }},{% endfor %}]
 var dates = {{ dates|safe }}
- 
+var ndvidates = {{ ndvidates|safe }}
 
 var multiselect = false;
 var count = 0;
@@ -214,6 +221,9 @@ function selectChart(chart) {
       case "luminosity_div":
         document.getElementById("luminosity_button").classList.remove("selected_button");
         break;
+      case "ndvi_div":
+        document.getElementById("ndvi_button").classList.remove("selected_button");
+        break;
     }
     
     
@@ -239,6 +249,10 @@ function selectChart(chart) {
       case "luminosity_div":
         document.getElementById("luminosity_button").classList.add("selected_button");
         drawLuminosities();  
+        break;
+      case "ndvi_div":
+        document.getElementById("ndvi_button").classList.add("selected_button");
+        drawNDVI();  
         break;
     }
     
@@ -266,9 +280,11 @@ $(document).ready(function () {
       drawHumidities();
       drawSoilMoistures();
       drawLuminosities();
+      drawNDVI();
     });
     selectTab("data");
     selectChart("temperature_div");
+
     
 
 });
@@ -435,6 +451,45 @@ $(document).ready(function () {
         };
   
         var chart = new google.visualization.LineChart(document.getElementById('humidity_div'));
+        chart.draw(data, options);
+      };
+
+
+      function drawNDVI() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'X');
+        data.addColumn('number', 'NDVI value');
+
+
+        var combined = ndvis.map(function(e, i) {
+        return [new Date(ndvidates[i]), e];
+        });
+  
+        data.addRows(combined);
+
+        
+  
+        var options = {
+          curveType: 'function',
+          
+          
+
+
+          hAxis: {
+            title: 'Measurement point',
+            format: 'HH:mm'
+            
+          },
+          vAxis: {
+            
+            
+            title: 'NDVI value',
+            
+          },
+          backgroundColor: 'transparent'
+        };
+  
+        var chart = new google.visualization.LineChart(document.getElementById('ndvi_div'));
         chart.draw(data, options);
       };
             
