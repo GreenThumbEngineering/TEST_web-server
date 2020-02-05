@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, Http404
 from django.views.generic import TemplateView
-from .models import PlantData, Plants
+from .models import PlantData, Plants, NDVIMeasurement
 from customuser.models import User
 from django.utils.datastructures import MultiValueDictKeyError
 from datetime import datetime, timedelta
@@ -38,15 +38,20 @@ def frontpage(request):
 def display(request, id):
 
     time_threshold = datetime.now() - timedelta(hours=24)
+    time_threshold2 = datetime.now() - timedelta(days=7)
     plantinfo = Plants.objects.filter(user=request.user).get(id=id)
 
     datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).filter(ServerTime__gt=time_threshold)
-    plantinfo = Plants.objects.filter(user=request.user).get(id=id)
+    ndvidata = NDVIMeasurement.objects.filter(Plant=plantinfo).filter(MeasurementTime__gt=time_threshold2)
 
     dates = []
+    ndvidates = []
 
     for plant in datas:
         dates.append(str(plant.ServerTime))
+    
+    for plant in ndvidata:
+        ndvidates.append(str(plant.MeasurementTime))
 
     if request.method == 'POST':
         if request.POST.get('NDVI_value'):
@@ -67,7 +72,7 @@ def display(request, id):
         ndviform = NDVIForm()
         waterform = WaterForm()
 
-    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'ndviform': ndviform, 'waterform': waterform, 'dates': dates})
+    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'ndviform': ndviform, 'waterform': waterform, 'dates': dates, 'ndvidates': ndvidates, 'ndvidata': ndvidata})
 
 @csrf_exempt
 def postdata(request):

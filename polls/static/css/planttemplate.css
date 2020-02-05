@@ -11,15 +11,16 @@ body {
   background: transparent;
 }
 
-#tabcontainer {
-  overflow:hidden;
-  overflow-y: scroll;
-  overflow-x: scroll;
-  height: 602px;
-}
+
 
 link:hover {
   text-decoration: none;
+}
+
+.captioncontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .maincontainer {
@@ -44,6 +45,13 @@ link:hover {
 
 }
 
+#data_button {
+  border-radius: 10px 0 0 0;
+}
+  
+#predictions_button{
+  border-radius: 0 10px 0 0;
+}
 
 
 table, th, td, h1 {
@@ -52,12 +60,33 @@ text-align: center;
 
 #data_div, #forms_div, #predictions_div {
   display: none;
+}
 
+#tabs_div {
+  overflow: auto;
+}
+
+#forms_div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#predictions_div, #forms_div, #tabs_div {
+  height: 100%;
+  background: #f1f8e9;
+}
+
+#predictions_div {
+  justify-content: center;
+  align-items: center;
 }
 
 
 #tabcontainer {
   display: flex;
+  flex-direction: column;
   flex-basis: 75%;
   flex: 2;
   background-color: white;
@@ -65,7 +94,24 @@ text-align: center;
   margin: 10px;
   border: 2px solid #e1e4e8 !important;
   font-size: 0.8vw !important;
+  height: 602px;
 }
+
+#tab_selection_div {
+  display: flex;
+  flex-direction: row;
+}
+
+
+#tab_selection_div li Button {
+  flex: 1;
+  padding: 0px !important;
+  min-height: 50px;
+  background-color: #f1f8e9;
+}
+
+
+
 
 #tabcontainer #data_div table {
   font-size: 0.8vw !important;
@@ -79,7 +125,7 @@ text-align: center;
   padding-bottom: 20px;
 }
 
-#temperature_div, #humidity_div, #soilmoisture_div, #luminosity_div {
+#temperature_div, #humidity_div, #soilmoisture_div, #luminosity_div, #ndvi_div {
   height: 500px;
   background-color: #f1f8e9;
   border-radius: 0 0 10px 10px;
@@ -89,8 +135,16 @@ text-align: center;
   border: 2px solid #e1e4e8 !important;
   display: none;
 }
+
 #tab_selection_div li{
-  list-style-type: none;
+    text-align: center;
+    list-style-type: none;
+    flex: 1;
+    display: flex; 
+}
+
+#tab_selection_div li Button:focus {
+  outline: none;
 }
 
 .selected_button {
@@ -119,17 +173,15 @@ text-align: center;
   list-style-type: none;
   flex: 1;
   display: flex;
-
-  
 }
 
 #multiselect_button{
 border-radius: 10px 0 0 0;
 }
 
-#luminosity_button{
+#ndvi_button{
   border-radius: 0 10px 0 0;
-  }
+}
 
 
 
