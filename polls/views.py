@@ -16,6 +16,7 @@ from .forms import PlantsForm
 from django.shortcuts import redirect
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
+from .forms import NDVIForm, WaterForm
 
 class PlantUpdate(UpdateView):
     model = Plants
@@ -35,6 +36,7 @@ def frontpage(request):
         return render(request, 'frontpage.html')
 
 def display(request, id):
+
     time_threshold = datetime.now() - timedelta(hours=24)
     plantinfo = Plants.objects.filter(user=request.user).get(id=id)
 
@@ -46,7 +48,26 @@ def display(request, id):
     for plant in datas:
         dates.append(str(plant.ServerTime))
 
-    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'dates': dates})
+    if request.method == 'POST':
+        if request.POST.get('NDVI_value'):
+            ndviform = NDVIForm(request.POST)
+
+            if ndviform.is_valid():
+                ndviform.instance.Plant = plantinfo
+                ndviform.save()
+                waterform = WaterForm()
+        else: 
+            waterform = WaterForm(request.POST)
+            
+            if waterform.is_valid():
+                waterform.instance.Plant = plantinfo
+                waterform.save()
+                ndviform = NDVIForm()
+    else:    
+        ndviform = NDVIForm()
+        waterform = WaterForm()
+
+    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'ndviform': ndviform, 'waterform': waterform, 'dates': dates})
 
 @csrf_exempt
 def postdata(request):
