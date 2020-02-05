@@ -22,53 +22,106 @@
 <div class="imagecontainer">
   <img src="/static/images/plant.png" class="img"/>
   <span class="caption">{{ plantinfo.nickname }}<a href="/myplants/{{ plantinfo.id }}/update" class="link"> {% fa5_icon 'pencil-alt' 'fas' %}</a></span>
-<form method="post">
-    {% csrf_token %}
-    {{ ndviform }}
-    <input type="submit" value="Submit">
-</form>
 
-<form method="post">
-  {% csrf_token %}
-  {{ waterform }}
-  <input type="submit" value="Submit">
-</form>
 
 </div>
 
-
-<div class="tablecontainer">
-
-<table class="table table-striped">
-<tr>
-  <th>Temperature</th>
-  <th>Humidity</th>
-  <th>DeviceId</th>
-  <th>MeasurementTime</th>
-  <th>ServerTime</th>
-  <th>Soil moisture</th>
-  <th>SystemId</th>
-  <th>Luminosity</th>
-</tr>
-
-{% for datarow in plantdatas %}
-<tr>
-  <td>{{ datarow.Temperature }}</td>
-  <td>{{ datarow.Humidity }}</td>
-  <td>{{ datarow.DeviceId }}</td>
-  <td>{{ datarow.MeasurementTime }}</td>
-  <td>{{ datarow.ServerTime }}</td>
-  <td>{{ datarow.SoilMoisture }}</td>
-  <td>{{ datarow.SystemId }}</td>
-  <td>{{ datarow.Luminosity }}</td>
-</tr>
-{% endfor %}
-
-
-</table>
-
+<div id="tab_selection_div">
+  <li id="tab_selection_list">
+    <Button id="data_button" onClick="selectTab('data')">View data{% fa5_icon 'database' 'fas' %}</Button>
+    <Button id="forms_button" onClick="selectTab('forms')">Add water/NDVI {% fa5_icon 'wpforms' 'fab' %}</Button>
+    <Button id="predictions_button" onClick="selectTab('ai')">Predictions {% fa5_icon 'robot' 'fas' %}</Button>
+  </li>
+ 
 </div>
 
+<div id="tabcontainer">
+  <div id="data_div">
+    <table class="table table-striped">
+      <tr>
+        <th>Temperature</th>
+        <th>Humidity</th>
+        <th>DeviceId</th>
+        <th>MeasurementTime</th>
+        <th>ServerTime</th>
+        <th>Soil moisture</th>
+        <th>SystemId</th>
+        <th>Luminosity</th>
+      </tr>
+
+      {% for datarow in plantdatas %}
+      <tr>
+        <td>{{ datarow.Temperature }}</td>
+        <td>{{ datarow.Humidity }}</td>
+        <td>{{ datarow.DeviceId }}</td>
+        <td>{{ datarow.MeasurementTime }}</td>
+        <td>{{ datarow.ServerTime }}</td>
+        <td>{{ datarow.SoilMoisture }}</td>
+        <td>{{ datarow.SystemId }}</td>
+        <td>{{ datarow.Luminosity }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div id="forms_div">
+    <form method="post">
+      {% csrf_token %}
+      {{ ndviform }}
+      <input type="submit" value="Submit">
+    </form>
+  
+    <form method="post">
+      {% csrf_token %}
+      {{ waterform }}
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+  <div id="predictions_div">
+    <p>THIS DIV REPRESENTS PREDICTIONS MADE BY AI: PÄLÄLÄLÄLÄLÄLÄLÄLÄLÄLÄLÄASDASÄLDASÄDLASÄDLASÄDLSAÄDLSADÄ
+      SADASD124 
+      ASD214 
+      ASD §
+      ASD
+      ASD21       4123
+    </p>
+  </div>
+
+</div>
+<script type="text/javascript">
+  function clearSelectedTabs() {
+    var buttons = document.getElementById("tab_selection_list").children;
+    for(var i = 0; i < buttons.length; i++){
+      buttons[i].classList.remove("selected_button");
+    }
+    var divs = document.getElementById("tabcontainer").children;
+    for(var i = 0; i < divs.length; i++){
+      divs[i].style.display = "none";
+    }
+  }
+  
+  
+  function selectTab(tab) {
+    clearSelectedTabs();
+    switch(tab){
+      case "data":
+        document.getElementById("data_div").style.display = "flex";
+        document.getElementById("data_button").classList.add("selected_button");
+        break;
+      case "forms":
+        document.getElementById("forms_div").style.display = "flex";
+        document.getElementById("forms_button").classList.add("selected_button");
+        break;
+
+      case 'ai':
+        document.getElementById("predictions_div").style.display = "flex";
+        document.getElementById("predictions_button").classList.add("selected_button");
+        break;
+    }
+    
+  }
+
+  
+</script>
 
 
 </div>
@@ -214,8 +267,10 @@ $(document).ready(function () {
       drawSoilMoistures();
       drawLuminosities();
     });
-
+    selectTab("data");
     selectChart("temperature_div");
+    
+
 });
 
 

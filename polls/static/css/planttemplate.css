@@ -11,7 +11,7 @@ body {
   background: transparent;
 }
 
-.tablecontainer {
+#tabcontainer {
   overflow:hidden;
   overflow-y: scroll;
   overflow-x: scroll;
@@ -50,9 +50,13 @@ table, th, td, h1 {
 text-align: center;
 }
 
+#data_div, #forms_div, #predictions_div {
+  display: none;
+
+}
 
 
-.tablecontainer {
+#tabcontainer {
   display: flex;
   flex-basis: 75%;
   flex: 2;
@@ -63,7 +67,7 @@ text-align: center;
   font-size: 0.8vw !important;
 }
 
-.tablecontainer table {
+#tabcontainer #data_div table {
   font-size: 0.8vw !important;
 }
 
@@ -85,6 +89,10 @@ text-align: center;
   border: 2px solid #e1e4e8 !important;
   display: none;
 }
+#tab_selection_div li{
+  list-style-type: none;
+}
+
 .selected_button {
   background: linear-gradient(#526b2d,#f1f8e9) !important;
 }
@@ -93,9 +101,6 @@ text-align: center;
   overflow:auto;
 
 }
-
-
-
 
 #chart_selection_div {
   display: flex;
@@ -147,7 +152,7 @@ border-radius: 10px 0 0 0;
       flex: 1
     }
   
-    .tablecontainer {
+    #tabcontainer {
       flex: 3
     }
   }
