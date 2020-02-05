@@ -63,9 +63,29 @@
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-<div id="soilmoisture_div"></div>
 
-<div id="chart_div"></div>
+<div id="chart_selection_div">
+  <li id="chart_selection_list">
+    <Button id="multiselect_button" onClick="multiSelectSwitch()">Multiselect {% fa5_icon 'object-ungroup' 'fas' %}</Button>
+    <Button id="temperature_button" onClick="selectChart('temperature_div')">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</Button>
+    <Button id="humidity_button" onClick="selectChart('humidity_div')">Humidity {% fa5_icon 'wind' 'fas' %}</Button>
+    <Button id="soilmoisture_button" onClick="selectChart('soilmoisture_div')">Soil Moisture {% fa5_icon 'tint' 'fas' %}</Button>
+    <Button id="luminosity_button" onClick="selectChart('luminosity_div')">Luminosity {% fa5_icon 'sun' 'fas' %}</Button>
+  </li>
+ 
+</div>
+<script>
+ 
+</script>
+<div id="charts_div">
+  <div id="temperature_div"></div>
+
+  <div id="humidity_div"></div>
+
+  <div id="soilmoisture_div"></div>
+
+  <div id="luminosity_div"></div>
+</div>
 
 </body>
 </html>
@@ -83,32 +103,116 @@ text-align: center;
 <script>
 
 
-
-
-
-
 google.charts.load('current', {packages: ['corechart', 'line', 'controls']});
 google.charts.load('visualization', '1', { packages: ['corechart', 'controls'] });
 
 google.charts.setOnLoadCallback(drawTemperatures);
-google.charts.setOnLoadCallback(drawSoilMoisture);
+google.charts.setOnLoadCallback(drawHumidities);
+google.charts.setOnLoadCallback(drawSoilMoistures);
+google.charts.setOnLoadCallback(drawLuminosities);
 
-
-var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}]
 var temperatures = [{% for datarow in plantdatas %} {{ datarow.Temperature }},{% endfor %}]
-
+var humidities = [{% for datarow in plantdatas %} {{ datarow.Humidity }},{% endfor %}]
+var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}]
+var luminosities = [{% for datarow in plantdatas %} {{ datarow.Luminosity }},{% endfor %}]
 var dates = {{ dates|safe }}
+ 
+
+var multiselect = false;
+var count = 0;
+
+function resetCharts() {
+  
+  if(!multiselect) { 
+    count = 0;
+    var divs = document.getElementById("charts_div").children;
+    for(var i = 0; i < divs.length; i++) {
+      divs[i].style.display = "none";
+    }
+    var buttons = document.getElementById("chart_selection_list").children;
+    for(var i = 1; i < buttons.length; i++) {
+      buttons[i].classList.remove("selected_button");
+    }
+  }
+}
+
+function selectChart(chart) {
+  resetCharts();
+
+  if(document.getElementById(chart).style.display === "block" && count > 1) {
+    count = count -1;
+    document.getElementById(chart).style.display = "none";
+    switch(chart) {
+      case "temperature_div":
+        document.getElementById("temperature_button").classList.remove("selected_button");
+        break;
+      case "humidity_div":
+        document.getElementById("humidity_button").classList.remove("selected_button");
+        break;
+      case "soilmoisture_div":
+        document.getElementById("soilmoisture_button").classList.remove("selected_button");
+        break;
+      case "luminosity_div":
+        document.getElementById("luminosity_button").classList.remove("selected_button");
+        break;
+    }
+    
+    
+  }
+  else {
+    if(document.getElementById(chart).style.display === "none"){
+      count = count +1;
+    }
+    document.getElementById(chart).style.display = "block";
+    switch(chart) {
+      case "temperature_div":
+        document.getElementById("temperature_button").classList.add("selected_button");
+        drawTemperatures();
+        break;
+      case "humidity_div":
+        document.getElementById("humidity_button").classList.add("selected_button");
+        drawHumidities();
+        break;
+      case "soilmoisture_div":
+        document.getElementById("soilmoisture_button").classList.add("selected_button");
+        drawSoilMoistures();
+        break;
+      case "luminosity_div":
+        document.getElementById("luminosity_button").classList.add("selected_button");
+        drawLuminosities();  
+        break;
+    }
+    
+  }
+}
+
+function multiSelectSwitch() {
+  if(multiselect) {
+    multiselect = false;
+    document.getElementById("multiselect_button").classList.remove("selected_button");
+    count = 0;
+    selectChart("temperature_div");
+
+  }
+  else {
+    multiselect = true;
+    document.getElementById("multiselect_button").classList.add("selected_button");
+  }
+}
 
 
 $(document).ready(function () {
+    selectChart("temperature_div");
     $(window).resize(function(){
       drawTemperatures();
-      drawSoilMoisture();
+      drawHumidities();
+      drawSoilMoistures();
+      drawLuminosities();
     });
 });
-  
+
       
-      function drawSoilMoisture() {
+      function drawSoilMoistures() {
         var data = new google.visualization.DataTable();
         data.addColumn('datetime', 'X');
         data.addColumn('number', 'Moisture');
@@ -151,9 +255,8 @@ $(document).ready(function () {
       function drawTemperatures() {
         var data = new google.visualization.DataTable();
         data.addColumn('datetime', 'X');
-        data.addColumn('number', 'Temperature');
+        data.addColumn('number', 'Temperature(C)');
 
-        console.log("test")
 
         var combined = temperatures.map(function(e, i) {
         return [new Date(dates[i]), e];
@@ -180,17 +283,96 @@ $(document).ready(function () {
               min:-5
           },
             
-            title: 'Temperature',
+            title: 'Temperature(C)',
             
           },
           backgroundColor: '#f1f8e9'
         };
   
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.LineChart(document.getElementById('temperature_div'));
         chart.draw(data, options);
       };
 
+      function drawLuminosities() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'X');
+        data.addColumn('number', 'Luminosity');
+
+        
+
+        var combined = luminosities.map(function(e, i) {
+        return [new Date(dates[i]), e];
+        });
+  
+        data.addRows(combined);
+
+        
+  
+        var options = {
+          curveType: 'function',
+          
+          hAxis: {
+            title: 'Measurement point',
+            format: 'HH:mm',
+            
+          },
+
+          
+          vAxis: {
+            
+            title: 'Luminosity',
+            viewWindow: {
+              max:4095,
+              min:1000,
+          }
+          },
+          backgroundColor: '#f1f8e9'
+        };
+  
+        var chart = new google.visualization.LineChart(document.getElementById('luminosity_div'));
+        chart.draw(data, options);
+      };
       
+      function drawHumidities() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'X');
+        data.addColumn('number', 'Humidity(%)');
+
+        
+
+        var combined = humidities.map(function(e, i) {
+        return [new Date(dates[i]), e];
+        });
+  
+        data.addRows(combined);
+
+        
+  
+        var options = {
+          curveType: 'function',
+          
+          hAxis: {
+            title: 'Measurement point',
+            format: 'HH:mm',
+            
+          },
+
+          
+          vAxis: {
+            
+            title: 'Humidity',
+            viewWindow: {
+              max:100,
+              min:0,
+          }
+          },
+          backgroundColor: '#f1f8e9'
+        };
+  
+        var chart = new google.visualization.LineChart(document.getElementById('humidity_div'));
+        chart.draw(data, options);
+      };
+            
 
       
       </script>
