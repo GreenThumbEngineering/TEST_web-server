@@ -61,8 +61,7 @@
 
 </div>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+<div id="chart_container">
 
 <div id="chart_selection_div">
   <li id="chart_selection_list">
@@ -74,9 +73,7 @@
   </li>
  
 </div>
-<script>
- 
-</script>
+
 <div id="charts_div">
   <div id="temperature_div"></div>
 
@@ -87,16 +84,13 @@
   <div id="luminosity_div"></div>
 </div>
 
+</div>
+
 </body>
 </html>
 
-<style>
 
-table, th, td, h1 {
-text-align: center;
-}
-
-</style>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -245,7 +239,7 @@ $(document).ready(function () {
               min:1000
           }
           },
-          backgroundColor: '#f1f8e9'
+          backgroundColor: 'transparent'
         };
   
         var chart = new google.visualization.LineChart(document.getElementById('soilmoisture_div'));
@@ -286,7 +280,7 @@ $(document).ready(function () {
             title: 'Temperature(C)',
             
           },
-          backgroundColor: '#f1f8e9'
+          backgroundColor: 'transparent'
         };
   
         var chart = new google.visualization.LineChart(document.getElementById('temperature_div'));
@@ -326,7 +320,7 @@ $(document).ready(function () {
               min:1000,
           }
           },
-          backgroundColor: '#f1f8e9'
+          backgroundColor: 'transparent'
         };
   
         var chart = new google.visualization.LineChart(document.getElementById('luminosity_div'));
@@ -366,7 +360,7 @@ $(document).ready(function () {
               min:0,
           }
           },
-          backgroundColor: '#f1f8e9'
+          backgroundColor: 'transparent'
         };
   
         var chart = new google.visualization.LineChart(document.getElementById('humidity_div'));
