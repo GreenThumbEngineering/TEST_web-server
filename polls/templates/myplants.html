@@ -21,16 +21,21 @@
 			{% for plant in plants %}
 			<div class="plantdiv">
 				<div class="imagecontainer">
-					<img src="/static/images/plant.png" class="img"/>
+					<a href="/myplants/{{ plant.id }}"><img src="/static/images/plant.png" class="img"/></a>
 				</div>
 				
-				<a href="/myplants/{{ plant.deviceid }}" class="link">{{ plant.deviceid }}</a>
+				{% if plant.nickname %}
+				<a href="/myplants/{{ plant.id }}" class="link">{{ plant.nickname }}</a>
+				{% else %}
+				<a href="/myplants/{{ plant.id }}" class="link">{{ plant.deviceid }}</a>
+				{% endif %}
+			
 			</div>
 			{% endfor %}
 
 			<div class="plantdiv">
 				<div class="imagecontainer">
-					<img src="/static/images/plant.png" class="img"/>
+					<a href="/addplant/"><img src="/static/images/plus.png" class="img"/></a>
 				</div>
 				
 				<a href="/addplant/" class="link">Add a new plant</a>

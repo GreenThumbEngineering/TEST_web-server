@@ -1,7 +1,7 @@
 html {
   background: url(/static/images/background1.jpg) no-repeat center center fixed; 
-
   background-size: cover;
+  overflow-y: scroll;
   
 }
 
@@ -11,51 +11,183 @@ body {
   background: transparent;
 }
 
+
+
+link:hover {
+  text-decoration: none;
+}
+
+.captioncontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .maincontainer {
-background: transparent;
-display: flex;
-flex-direction: row;
-flex-wrap: row;
-width: 100%;
-margin-left: 0px !important;
-margin-right: 0px !important;
-justify-content: center;
+  background: transparent;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: row;
+  width: 100%;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  justify-content: center;
 }
 
 .imagecontainer {
-    flex-basis: 25%;
-    flex: 1;
-    text-align: center;
-    background-color: #f1f8e9;
-    border-radius: 10px;
-    margin: 10px;
-    border: 2px solid #e1e4e8 !important;
+  flex-basis: 25%;
+  flex: 1;
+  text-align: center;
+  background-color: #f1f8e9;
+  border-radius: 10px;
+  margin: 10px;
+  border: 2px solid #e1e4e8 !important;
 
 }
 
-.tablecontainer {
-    display: flex;
-    flex-basis: 75%;
-    flex: 2;
-    background-color: white;
-    border-radius: 10px;
-    margin: 10px;
-    border: 2px solid #e1e4e8 !important;
+#data_button {
+  border-radius: 10px 0 0 0;
 }
+  
+#predictions_button{
+  border-radius: 0 10px 0 0;
+}
+
+
+table, th, td, h1 {
+text-align: center;
+}
+
+#data_div, #forms_div, #predictions_div {
+  display: none;
+}
+
+#tabs_div {
+  overflow: auto;
+}
+
+#forms_div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#predictions_div, #forms_div, #tabs_div {
+  height: 100%;
+  background: #f1f8e9;
+}
+
+#predictions_div {
+  justify-content: center;
+  align-items: center;
+}
+
+
+#tabcontainer {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 75%;
+  flex: 2;
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px;
+  border: 2px solid #e1e4e8 !important;
+  height: 602px;
+}
+
+#tab_selection_div {
+  display: flex;
+  flex-direction: row;
+}
+
+
+#tab_selection_div li Button {
+  flex: 1;
+  padding: 0px !important;
+  min-height: 50px;
+  background-color: #f1f8e9;
+}
+
 
 .caption {
-display: block;
-text-align: center;
-padding-top: 20px;
-padding-bottom: 20px;
+  display: block;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-#chart_div, #soilmoisture_div {
- height: 500px;
- background-color: white;
-    border-radius: 10px;
-    margin: 10px;
-    border: 2px solid #e1e4e8 !important;
+#temperature_div, #humidity_div, #soilmoisture_div, #luminosity_div, #ndvi_div {
+  height: 500px;
+  background-color: #f1f8e9;
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: 2px solid #e1e4e8 !important;
+  display: none;
+}
+
+#tab_selection_div li{
+    text-align: center;
+    list-style-type: none;
+    flex: 1;
+    display: flex; 
+}
+
+#tab_selection_div li Button:focus {
+  outline: none;
+}
+
+.selected_button {
+  background: linear-gradient(#526b2d,#f1f8e9) !important;
+}
+
+#charts_div {
+  overflow:auto;
+
+}
+
+#chart_selection_div {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#charts_container{
+  width: 100%;
+  overflow:auto;
+}
+
+#chart_selection_div li{
+  text-align: center;
+  list-style-type: none;
+  flex: 1;
+  display: flex;
+}
+
+#multiselect_button{
+border-radius: 10px 0 0 0;
+}
+
+#ndvi_button{
+  border-radius: 0 10px 0 0;
+}
+
+
+
+#chart_selection_div li Button {
+
+  margin-top: 10px;
+  flex: 1;
+  padding: 0px !important;
+  min-height: 50px;
+  background-color: #f1f8e9;
+}
+
+#chart_selection_div li Button:focus {
+  outline: none;
 }
 
 
@@ -64,7 +196,7 @@ padding-bottom: 20px;
       flex: 1
     }
   
-    .tablecontainer {
+    #tabcontainer {
       flex: 3
     }
   }
