@@ -117,7 +117,10 @@ def myplants(request):
         time_threshold = datetime.now() - timedelta(hours=2)
         plantswithdata = []
         for plant in plants:
-            plantswithdata.append([plant, PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime').ServerTime.replace(tzinfo=None) > time_threshold])
+            if PlantData.objects.filter(DeviceId=plant.deviceid).exists():
+                plantswithdata.append([plant, PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime').ServerTime.replace(tzinfo=None) > time_threshold.replace(tzinfo=None)])
+            else: 
+                plantswithdata.append([plant, bool(False)])
         return render(request, 'myplants.html', {'plants': plantswithdata})
     else:
         return redirect('/')
@@ -130,7 +133,7 @@ def addplant(request):
                 form.instance.user = request.user
 
                 form.save()
-                return redirect('myplants')
+                return myplants(request)
         else:
             form = PlantsForm()
         
