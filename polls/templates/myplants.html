@@ -21,13 +21,19 @@
 			{% for plant in plants %}
 			<div class="plantdiv">
 				<div class="imagecontainer">
-					<a href="/myplants/{{ plant.id }}"><img src="/static/images/plant.png" class="img"/></a>
+					<a href="/myplants/{{ plant.0.id }}"><img src="/static/images/plant.png" class="img"/></a>
 				</div>
 				
 				{% if plant.nickname %}
-				<a href="/myplants/{{ plant.id }}" class="link">{{ plant.nickname }}</a>
+				<a href="/myplants/{{ plant.0.id }}" class="link">{{ plant.0.nickname }}</a>
+					{% if not plant.1 %}
+						<a href="/myplants/{{ plant.0.id }}" class="link">{{ plant.1 }}</a>
+					{% endif %}
 				{% else %}
-				<a href="/myplants/{{ plant.id }}" class="link">{{ plant.deviceid }}</a>
+				<a href="/myplants/{{ plant.0.id }}" class="link">{{ plant.0.deviceid }}</a>
+					{% if not plant.1 %}
+						<a href="/myplants/{{ plant.0.id }}" class="valuelink">Missing values!</a>
+					{% endif %}
 				{% endif %}
 			
 			</div>

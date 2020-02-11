@@ -15,7 +15,7 @@
   
       <div class="loginform">
 
-<form method="post">{% csrf_token %}
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
     {{ form.as_p }}
     <input class="button" type="submit" value="Update">
 </form>

@@ -1,4 +1,4 @@
-html, body, .container {
+html, body {
     height: 100%;
     margin: 0;
 }
@@ -18,7 +18,7 @@ div.plantdiv {
 	border-radius: 4px;
     padding: 5px;
     width: 200px;
-	max-height: 260px;
+	max-height: 400px;
 	background: white;
 	transition: all 0.25s ease-out;
 	overflow: hidden;
@@ -49,9 +49,8 @@ div.plantdiv img {
 
 
 body {
-	background: url(/static/images/background3.png) no-repeat center center fixed;
+	background: url(/static/images/background4.jpg) no-repeat center center fixed;
 	background-size: cover;
-	background-size: 100% 100%;
 }
 
 
@@ -65,6 +64,21 @@ body {
 	text-align: center;
 	text-decoration: none;
 	color: #526b2d;
+	font-family: Tahoma, Geneva, sans-serif;
+}
+
+.valuelink {
+	font-family: Tahoma, Geneva, sans-serif;
+	text-align: center;
+	display: inline-block;
+	flex-direction: column;
+	align-self: self-end;
+	width: 100%;
+	padding-top: 25px;
+	padding-bottom: 20px;
+	text-align: center;
+	text-decoration: none;
+	color: red;
 	font-family: Tahoma, Geneva, sans-serif;
 }
 
