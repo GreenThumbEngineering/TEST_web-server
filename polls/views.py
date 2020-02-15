@@ -114,7 +114,7 @@ def postdata(request):
 def myplants(request):
     if request.user.is_authenticated:
         plants = Plants.objects.filter(user=request.user.id)
-        time_threshold = datetime.now() - timedelta(hours=2)
+        time_threshold = datetime.now() - timedelta(hours=4)
         plantswithdata = []
         for plant in plants:
             if PlantData.objects.filter(DeviceId=plant.deviceid).exists():

@@ -25,6 +25,23 @@
 
 <body>
 
+  <nav class="navbar navbar-expand-lg navbar-light gt-navbar">
+    <a class="navbar-brand" href="/"><img src="/static/images/greenthumb.png" class="iconimg"/> Greenthumb</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/myplants">My plants</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/addplant">Add plant</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
 
 <div class="maincontainer">
   
@@ -125,16 +142,16 @@
 
     <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="temperature-tab" data-toggle="tab" href="#temperature" role="tab" aria-controls="temperature" aria-selected="true">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</a>
+        <a class="nav-link active chart-nav-link" id="temperature-tab" data-toggle="tab" href="#temperature" role="tab" aria-controls="temperature" aria-selected="true">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="humidity-tab" data-toggle="tab" href="#humidity" role="tab" aria-controls="humidity" aria-selected="false">Humidity {% fa5_icon 'wind' 'fas' %}</a>
+        <a class="nav-link chart-nav-link" id="humidity-tab" data-toggle="tab" href="#humidity" role="tab" aria-controls="humidity" aria-selected="false">Humidity {% fa5_icon 'wind' 'fas' %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="moisture-tab" data-toggle="tab" href="#moisture" role="tab" aria-controls="moisture" aria-selected="false">Soil moisture {% fa5_icon 'tint' 'fas' %}</a>
+        <a class="nav-link chart-nav-link" id="moisture-tab" data-toggle="tab" href="#moisture" role="tab" aria-controls="moisture" aria-selected="false">Soil moisture {% fa5_icon 'tint' 'fas' %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="luminosity-tab" data-toggle="tab" href="#luminosity" role="tab" aria-controls="luminosity" aria-selected="false">Luminosity {% fa5_icon 'sun' 'fas' %}</a>
+        <a class="nav-link chart-nav-link" id="luminosity-tab" data-toggle="tab" href="#luminosity" role="tab" aria-controls="luminosity" aria-selected="false">Luminosity {% fa5_icon 'sun' 'fas' %}</a>
       </li>
     </ul>
 
@@ -213,7 +230,7 @@ $(document).ready(function () {
       drawLuminosities();
       drawTemperatures();   
     });
-    $(".nav-link").on('click', function(event) {
+    $(".chart-nav-link").on('click', function(event) {
     event.preventDefault();
     drawHumidities();
     drawSoilMoistures();
@@ -227,7 +244,7 @@ function drawTemperatures() {
         theme: 'material',
         curveType: 'function',
         backgroundColor: 'transparent',
-        
+
 
         hAxis: {
             title: 'Measurement point',
@@ -238,7 +255,7 @@ function drawTemperatures() {
           },
         series:{
        0:{targetAxisIndex:0},
-       1:{targetAxisIndex:1},
+       1:{targetAxisIndex:1, pointSize: 5},
        2:{targetAxisIndex:1}},       
 
         };
@@ -318,7 +335,7 @@ function drawSoilMoistures() {
           },
         series:{
        0:{targetAxisIndex:0},
-       1:{targetAxisIndex:1},
+       1:{targetAxisIndex:1, pointSize: 5},
        2:{targetAxisIndex:1}},       
 
         };
@@ -397,7 +414,7 @@ function drawHumidities() {
           },
         series:{
        0:{targetAxisIndex:0},
-       1:{targetAxisIndex:1},
+       1:{targetAxisIndex:1, pointSize: 5},
        2:{targetAxisIndex:1}},       
 
         };
@@ -477,7 +494,7 @@ function drawHumidities() {
           },
         series:{
        0:{targetAxisIndex:0},
-       1:{targetAxisIndex:1},
+       1:{targetAxisIndex:1, pointSize: 5},
        2:{targetAxisIndex:1}},       
 
         };

@@ -7,8 +7,15 @@ html {
 
 body {
   background: transparent;
-  margin-left: 2%;
-  margin-right: 2%;
+}
+
+.gt-navbar {
+  background: #f1f8e9 !important;
+  border-bottom: 1px solid #526b2d;
+}
+
+.iconimg {
+  max-height: 40px;
 }
 
 
@@ -31,13 +38,33 @@ link:hover {
   flex-direction: row;
   flex-wrap: row;
   justify-content: center;
-  margin: 10px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .img {
   align-self: center;
   max-width: 100%;
   border-radius: 5px;
+}
+
+img {
+	image-orientation: from-image;
+}
+
+
+.placeholder a {
+  margin: 2px;
+}
+
+.placeholder a i {
+  color: #526b2d !important;
+}
+
+.placeholder span {
+text-align: center;
 }
 
 .imagecontainer {
@@ -64,9 +91,10 @@ link:hover {
   background: #f1f8e9 !important;
   border-radius: 5px;
   padding: 0 !important;
-  margin: 20px;
   border: 1px solid #d4d4d4;
   overflow: hidden;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .maincontainer .tab-content {
