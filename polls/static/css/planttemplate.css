@@ -38,7 +38,10 @@ link:hover {
   flex-direction: row;
   flex-wrap: row;
   justify-content: center;
-  margin: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .img {
@@ -51,12 +54,6 @@ img {
 	image-orientation: from-image;
 }
 
-.placeholder {
-  height: 40px;
-  background: #f1f8e9;
-  width: 100%;
-  border-radius: 5px;
-}
 
 .placeholder a {
   margin: 2px;
@@ -96,8 +93,8 @@ text-align: center;
   padding: 0 !important;
   border: 1px solid #d4d4d4;
   overflow: hidden;
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .maincontainer .tab-content {
