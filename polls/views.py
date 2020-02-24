@@ -31,7 +31,7 @@ class PlantUpdate(UpdateView):
 
 def frontpage(request):
     if request.user.is_authenticated:
-        return render(request, 'myplants.html', {'plants': Plants.objects.filter(user=request.user)})
+        return myplants(request)
     else: 
         return render(request, 'frontpage.html')
 
@@ -41,8 +41,8 @@ def display(request, id):
     time_threshold2 = datetime.now() - timedelta(days=7)
     plantinfo = Plants.objects.filter(user=request.user).get(id=id)
 
-    datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).filter(ServerTime__gt=time_threshold)
-    ndvidata = NDVIMeasurement.objects.filter(Plant=plantinfo).filter(MeasurementTime__gt=time_threshold2)
+    datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).order_by('-ServerTime') #.filter(ServerTime__gt=time_threshold)
+    ndvidata = NDVIMeasurement.objects.filter(Plant=plantinfo) #.filter(MeasurementTime__gt=time_threshold2)
 
     dates = []
     ndvidates = []
@@ -113,19 +113,27 @@ def postdata(request):
 
 def myplants(request):
     if request.user.is_authenticated:
-        return render(request, 'myplants.html', {'plants': Plants.objects.filter(user=request.user.id)})
+        plants = Plants.objects.filter(user=request.user.id)
+        time_threshold = datetime.now() - timedelta(hours=4)
+        plantswithdata = []
+        for plant in plants:
+            if PlantData.objects.filter(DeviceId=plant.deviceid).exists():
+                plantswithdata.append([plant, PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime').ServerTime.replace(tzinfo=None) > time_threshold.replace(tzinfo=None)])
+            else: 
+                plantswithdata.append([plant, bool(False)])
+        return render(request, 'myplants.html', {'plants': plantswithdata})
     else:
         return redirect('/')
 
 def addplant(request):
     if request.user.is_authenticated:
         if request.method == 'POST':           
-            form = PlantsForm(request.POST)
+            form = PlantsForm(request.POST, request.FILES)
             if form.is_valid():
                 form.instance.user = request.user
 
                 form.save()
-                return redirect('myplants')
+                return myplants(request)
         else:
             form = PlantsForm()
         

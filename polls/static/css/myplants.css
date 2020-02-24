@@ -1,4 +1,4 @@
-html, body, .container {
+html, body {
     height: 100%;
     margin: 0;
 }
@@ -18,7 +18,7 @@ div.plantdiv {
 	border-radius: 4px;
     padding: 5px;
     width: 200px;
-	max-height: 260px;
+	max-height: 400px;
 	background: white;
 	transition: all 0.25s ease-out;
 	overflow: hidden;
@@ -46,12 +46,14 @@ div.plantdiv img {
 	max-height: 200px;
 }
 
+img {
+	image-orientation: from-image;
+}
 
 
 body {
-	background: url(/static/images/background3.png) no-repeat center center fixed;
+	background: url(/static/images/background4.jpg) no-repeat center center fixed;
 	background-size: cover;
-	background-size: 100% 100%;
 }
 
 
@@ -68,6 +70,21 @@ body {
 	font-family: Tahoma, Geneva, sans-serif;
 }
 
+.valuelink {
+	font-family: Tahoma, Geneva, sans-serif;
+	text-align: center;
+	display: inline-block;
+	flex-direction: column;
+	align-self: self-end;
+	width: 100%;
+	padding-top: 25px;
+	padding-bottom: 20px;
+	text-align: center;
+	text-decoration: none;
+	color: red;
+	font-family: Tahoma, Geneva, sans-serif;
+}
+
 
 
 
@@ -76,6 +93,7 @@ body {
 	min-height: 200px;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 }
 
 .description {

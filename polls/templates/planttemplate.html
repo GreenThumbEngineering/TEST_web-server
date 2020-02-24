@@ -11,170 +11,209 @@
 <html>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/planttemplate.css' %}">
 <head><title>Home Page</title></head>
 
 
 <body>
 
+  <nav class="navbar navbar-expand-lg navbar-light gt-navbar">
+    <a class="navbar-brand" href="/"><img src="/static/images/greenthumb.png" class="iconimg"/> Greenthumb</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/myplants">My plants</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/addplant">Add plant</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
 <div class="maincontainer">
-
-<div class="imagecontainer">
-  <img src="/static/images/plant.png" class="img"/>
-  <div class="captioncontainer">
-  <span class="caption">{{ plantinfo.nickname }}<a href="/myplants/{{ plantinfo.id }}/update" class="link"> {% fa5_icon 'pencil-alt' 'fas' %}</a></span>
-  </div>
-
-</div>
-
-
-
-
-
-<div id="tabcontainer">
-  <div id="tab_selection_div">
-    <li id="tab_selection_list">
-      <Button id="data_button" onClick="selectTab('data')">View data {% fa5_icon 'database' 'fas' %}</Button>
-      <Button id="forms_button" onClick="selectTab('forms')">Add water/NDVI {% fa5_icon 'wpforms' 'fab' %}</Button>
-      <Button id="predictions_button" onClick="selectTab('ai')">Predictions {% fa5_icon 'robot' 'fas' %}</Button>
-    </li>
-  </div>
-
-  <div id="tabs_div">
-
-  <div id="data_div">
-    <table class="table table-striped">
-      <tr>
-        <th>Temperature</th>
-        <th>Humidity</th>
-        <th>DeviceId</th>
-        <th>MeasurementTime</th>
-        <th>ServerTime</th>
-        <th>Soil moisture</th>
-        <th>SystemId</th>
-        <th>Luminosity</th>
-      </tr>
-
-      {% for datarow in plantdatas %}
-      <tr>
-        <td>{{ datarow.Temperature }}</td>
-        <td>{{ datarow.Humidity }}</td>
-        <td>{{ datarow.DeviceId }}</td>
-        <td>{{ datarow.MeasurementTime }}</td>
-        <td>{{ datarow.ServerTime }}</td>
-        <td>{{ datarow.SoilMoisture }}</td>
-        <td>{{ datarow.SystemId }}</td>
-        <td>{{ datarow.Luminosity }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-  </div>
-
-  <div id="forms_div">
-    <form method="post">
-      {% csrf_token %}
-      {{ ndviform }}
-      <input type="submit" value="Submit">
-    </form>
   
-    <form method="post">
-      {% csrf_token %}
-      {{ waterform }}
-      <input type="submit" value="Submit">
-    </form>
+    <div id="imagecontainer" class="imagecontainer">
+        {% if plantinfo.plant_pic %}
+        <img src="{{ plantinfo.plant_pic.url }}" style="max-width: 600px;" class="img"/>    
+        {% else %}
+        <img src="/static/images/plant2.jpg" style="max-width: 600px;" class="img"/>    
+        {% endif %}
+    <div class="captioncontainer">
+          <span class="caption">{{ plantinfo.nickname }}<a href="/myplants/{{ plantinfo.id }}/update" class="link"> {% fa5_icon 'pencil-alt' 'fas' %}</a></span>
+          <span class="caption"><b>ESP-ID:</b> {{ plantinfo.deviceid }}</span>
+        </div>
+    </div>
+
+    
+    <div id="tabcontainer">
+
+          <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="true">View data {% fa5_icon 'database' 'fas' %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="false">Add water/NDVI {% fa5_icon 'wpforms' 'fab' %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="ai-tab" data-toggle="tab" href="#ai" role="tab" aria-controls="ai" aria-selected="false">Predictions {% fa5_icon 'robot' 'fas' %}</a>
+            </li>
+          </ul>
+
+          <div class="tab-content " id="myTabContent">
+            
+            <div class="tab-pane show active" id="data" role="tabpanel" aria-labelledby="data-tab">
+              <div class="dataTables_wrapper dt-bootstrap4 no-footer table-responsive" style="width: 100%;">
+                <table class="table dataTable no-footer table-striped" role="grid" data-toggle="table" id="table" data-pagination="true">
+                  <thead>
+                  <tr>
+                    <th scope="col">SystemId</th>
+                    <th scope="col">ServerTime</th>
+                    <th scope="col">Temperature</th>
+                    <th scope="col">Humidity</th>
+                    <th scope="col">Soil moisture</th>                    
+                    <th scope="col">Luminosity</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for datarow in plantdatas %}
+                  <tr>
+                    <td style="word-break: break-all;">{{ datarow.SystemId }}</td>
+                    <td>{{ datarow.ServerTime }}</td>
+                    <td>{{ datarow.Temperature }}</td>
+                    <td>{{ datarow.Humidity }}</td>
+                    <td>{{ datarow.SoilMoisture }}</td>                   
+                    <td>{{ datarow.Luminosity }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="tab-pane" id="form" role="tabpanel" aria-labelledby="form-tab">
+              <form method="post">
+                {% csrf_token %}
+                
+                {% for field in ndviform %}
+                <div class="fieldWrapper">
+                  {{ field.errors }}
+                  {{ field.label_tag }} {{ field }} <input type="submit" value="Submit">
+                  {% if field.help_text %}
+                  <p class="help">{{ field.help_text|safe }}</p>
+                  {% endif %}
+                </div>
+                {% endfor %}
+                
+              </form>
+            
+              <form method="post">
+                {% csrf_token %}
+                {{ waterform }}
+                <input type="submit" value="Submit">
+              </form>
+            </div>
+
+
+            <div class="tab-pane" id="ai" role="tabpanel" aria-labelledby="ai-tab">
+              <p>We hope this might contain something one day</p>
+            </div>
+        </div>
+
+    </div>
+
   </div>
-  
-  <div id="predictions_div">
-    <p>We hope this might contain something one day</p>
+
+
+  <div id="chartdiv">
+
+    <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active chart-nav-link" id="temperature-tab" data-toggle="tab" href="#temperature" role="tab" aria-controls="temperature" aria-selected="true">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link chart-nav-link" id="humidity-tab" data-toggle="tab" href="#humidity" role="tab" aria-controls="humidity" aria-selected="false">Humidity {% fa5_icon 'wind' 'fas' %}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link chart-nav-link" id="moisture-tab" data-toggle="tab" href="#moisture" role="tab" aria-controls="moisture" aria-selected="false">Soil moisture {% fa5_icon 'tint' 'fas' %}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link chart-nav-link" id="luminosity-tab" data-toggle="tab" href="#luminosity" role="tab" aria-controls="luminosity" aria-selected="false">Luminosity {% fa5_icon 'sun' 'fas' %}</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="chartcontent">
+      
+      <div class="tab-pane show active" id="temperature" role="tabpanel" aria-labelledby="temperature-tab">
+        <div id="temperature_dashboard_div">
+          <div id="graphscontainer">
+            <div id="temperature_div"></div>
+          </div>
+          <div id="temperature_filter_div"></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="moisture" role="tabpanel" aria-labelledby="moisture-tab">
+        <div id="soilmoisture_dashboard_div">
+          <div id="graphscontainer">
+            <div id="soilmoisture_div"></div>
+          </div>
+          <div id="soilmoisture_filter_div"></div>
+        </div>
+      </div>
+
+
+
+      <div class="tab-pane" id="humidity" role="tabpanel" aria-labelledby="humidity-tab">
+        <div id="humidity_dashboard_div">
+          <div id="graphscontainer">
+            <div id="humidity_div"></div>
+          </div>
+          <div id="humidity_filter_div"></div>
+        </div>
+      </div>
+      
+
+      <div class="tab-pane" id="luminosity" role="tabpanel" aria-labelledby="luminosity-tab">
+        <div id="luminosity_dashboard_div">
+          <div id="graphscontainer">
+            <div id="luminosity_div"></div>
+          </div>
+          <div id="luminosity_filter_div"></div>
+        </div>    
+      </div>
   </div>
-
-
-</div>
 </div>
 
-</div>
-
-<div id="chart_container">
-
-<div id="chart_selection_div">
-  <li id="chart_selection_list">
-    <Button id="multiselect_button" onClick="multiSelectSwitch()">Select multiple {% fa5_icon 'object-ungroup' 'fas' %}</Button>
-    <Button id="temperature_button" onClick="selectChart('temperature_div')">Temperature {% fa5_icon 'thermometer-quarter' 'fas' %}</Button>
-    <Button id="humidity_button" onClick="selectChart('humidity_div')">Humidity {% fa5_icon 'wind' 'fas' %}</Button>
-    <Button id="soilmoisture_button" onClick="selectChart('soilmoisture_div')">Soil moisture {% fa5_icon 'tint' 'fas' %}</Button>
-    <Button id="luminosity_button" onClick="selectChart('luminosity_div')">Luminosity {% fa5_icon 'sun' 'fas' %}</Button>
-    <Button id="ndvi_button" onClick="selectChart('ndvi_div')">NDVI {% fa5_icon 'search' 'fas' %}</Button>
-  </li>
- 
-</div>
-
-<div id="charts_div">
-  <div id="temperature_div"></div>
-
-  <div id="humidity_div"></div>
-
-  <div id="soilmoisture_div"></div>
-
-  <div id="luminosity_div"></div>
-
-  <div id="ndvi_div"></div>
-</div>
-
-</div>
 
 </body>
+
+
 </html>
 
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-  function clearSelectedTabs() {
-    var buttons = document.getElementById("tab_selection_list").children;
-    for(var i = 0; i < buttons.length; i++){
-      buttons[i].classList.remove("selected_button");
-    }
-    var divs = document.getElementById("tabs_div").children;
-    for(var i = 0; i < divs.length; i++){
-      divs[i].style.display = "none";
-    }
-  }
   
-  
-  function selectTab(tab) {
-    clearSelectedTabs();
-    switch(tab){
-      case "data":
-        document.getElementById("data_div").style.display = "flex";
-        document.getElementById("data_button").classList.add("selected_button");
-        break;
-      case "forms":
-        document.getElementById("forms_div").style.display = "flex";
-        document.getElementById("forms_button").classList.add("selected_button");
-        break;
+history.replaceState(null, document.title, location.href);
 
-      case 'ai':
-        document.getElementById("predictions_div").style.display = "flex";
-        document.getElementById("predictions_button").classList.add("selected_button");
-        break;
-    }
-    
-  }
-
-  /*-----------------------------------------------*/
+google.charts.load('current', {packages: ['corechart', 'line', 'controls'], callback: drawTemperatures, drawHumidities, drawSoilMoistures, drawLuminosities});
+google.charts.load('visualization', '1', { packages: ['corechart', 'controls'], callback: drawTemperatures, drawHumidities, drawSoilMoistures, drawLuminosities });
 
 
-google.charts.load('current', {packages: ['corechart', 'line', 'controls']});
-google.charts.load('visualization', '1', { packages: ['corechart', 'controls'] });
-
-google.charts.setOnLoadCallback(drawTemperatures);
-google.charts.setOnLoadCallback(drawHumidities);
-google.charts.setOnLoadCallback(drawSoilMoistures);
-google.charts.setOnLoadCallback(drawLuminosities);
-google.charts.setOnLoadCallback(drawNDVI);
 
 var temperatures = [{% for datarow in plantdatas %} {{ datarow.Temperature }},{% endfor %}]
 var humidities = [{% for datarow in plantdatas %} {{ datarow.Humidity }},{% endfor %}]
@@ -184,315 +223,339 @@ var ndvis = [{% for datarow in ndvidata %} {{ datarow.NDVI_value }},{% endfor %}
 var dates = {{ dates|safe }}
 var ndvidates = {{ ndvidates|safe }}
 
-var multiselect = false;
-var count = 0;
-
-function resetCharts() {
-  
-  if(!multiselect) { 
-    count = 0;
-    var divs = document.getElementById("charts_div").children;
-    for(var i = 0; i < divs.length; i++) {
-      divs[i].style.display = "none";
-    }
-    var buttons = document.getElementById("chart_selection_list").children;
-    for(var i = 1; i < buttons.length; i++) {
-      buttons[i].classList.remove("selected_button");
-    }
-  }
-}
-
-function selectChart(chart) {
-  resetCharts();
-
-  if(document.getElementById(chart).style.display === "block" && count > 1) {
-    count = count -1;
-    document.getElementById(chart).style.display = "none";
-    switch(chart) {
-      case "temperature_div":
-        document.getElementById("temperature_button").classList.remove("selected_button");
-        break;
-      case "humidity_div":
-        document.getElementById("humidity_button").classList.remove("selected_button");
-        break;
-      case "soilmoisture_div":
-        document.getElementById("soilmoisture_button").classList.remove("selected_button");
-        break;
-      case "luminosity_div":
-        document.getElementById("luminosity_button").classList.remove("selected_button");
-        break;
-      case "ndvi_div":
-        document.getElementById("ndvi_button").classList.remove("selected_button");
-        break;
-    }
-    
-    
-  }
-  else {
-    if(document.getElementById(chart).style.display === "none"){
-      count = count +1;
-    }
-    document.getElementById(chart).style.display = "block";
-    switch(chart) {
-      case "temperature_div":
-        document.getElementById("temperature_button").classList.add("selected_button");
-        drawTemperatures();
-        break;
-      case "humidity_div":
-        document.getElementById("humidity_button").classList.add("selected_button");
-        drawHumidities();
-        break;
-      case "soilmoisture_div":
-        document.getElementById("soilmoisture_button").classList.add("selected_button");
-        drawSoilMoistures();
-        break;
-      case "luminosity_div":
-        document.getElementById("luminosity_button").classList.add("selected_button");
-        drawLuminosities();  
-        break;
-      case "ndvi_div":
-        document.getElementById("ndvi_button").classList.add("selected_button");
-        drawNDVI();  
-        break;
-    }
-    
-  }
-}
-
-function multiSelectSwitch() {
-  if(multiselect) {
-    multiselect = false;
-    document.getElementById("multiselect_button").classList.remove("selected_button");
-    count = 0;
-    selectChart("temperature_div");
-
-  }
-  else {
-    multiselect = true;
-    document.getElementById("multiselect_button").classList.add("selected_button");
-  }
-}
-
-
 $(document).ready(function () { 
     $(window).resize(function(){
-      drawTemperatures();
       drawHumidities();
       drawSoilMoistures();
       drawLuminosities();
-      drawNDVI();
+      drawTemperatures();   
     });
-    selectTab("data");
-    selectChart("temperature_div");
+    $(".chart-nav-link").on('click', function(event) {
+    event.preventDefault();
+    drawHumidities();
+    drawSoilMoistures();
+    drawLuminosities();
+    drawTemperatures();  
+});
+});      
 
-    
+function drawTemperatures() {
+    var optionsfortemp = {
+        theme: 'material',
+        curveType: 'function',
+        backgroundColor: 'transparent',
 
+
+        hAxis: {
+            title: 'Measurement point',
+            format: 'dd.MM HH:mm',            
+          },
+          vAxes: {0: {logScale: false, maxValue: 40, minValue: -5, title:'Temperature', textStyle:{color: '#3366CC'}},
+            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
+          },
+        series:{
+       0:{targetAxisIndex:0},
+       1:{targetAxisIndex:1, pointSize: 5},
+       2:{targetAxisIndex:1}},       
+
+        };
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'Date');
+        data.addColumn('number', 'Temperature');
+        data.addColumn('number', 'NDVI');
+
+        var combined = temperatures.map(function(e, i) {
+        return [new Date(dates[i]), e, null];
+        });
+
+
+  
+        data.addRows(combined);
+
+
+        var combined1 = ndvis.map(function(e, i) {
+
+        return [new Date(ndvidates[i]), null, e];
+        });
+
+
+      data.addRows(combined1);
+
+        var dateRangeSlider = new google.visualization.ControlWrapper({
+        'controlType': 'DateRangeFilter',
+        'containerId': 'temperature_filter_div',
+            'options': {
+            'filterColumnLabel': 'Date',
+            
+            'ui': {
+                        
+              'chartOptions' : {
+                
+                    chartArea : {
+                        width : '99%'
+                        
+                    },
+                    backgroundColor: 'transparent',
+                    theme: 'material'
+                    
+                },
+            }
+        }
+    });
+    var wrapper = new google.visualization.ChartWrapper({
+    chartType: 'LineChart',
+    dataTable: data,
+    options: optionsfortemp,
+    containerId: 'temperature_div'
 });
 
 
+    var dashboard = new google.visualization.Dashboard(document.getElementById('temperature_dashboard_div'));
+    dashboard.bind(dateRangeSlider, wrapper);
+    dashboard.draw(data);
+  };
+
+/*********************************************************************************************************************************/
 
 
-      
-      function drawSoilMoistures() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('datetime', 'X');
-        data.addColumn('number', 'Moisture');
-
+function drawSoilMoistures() {
+    var optionsfortemp = {
+        theme: 'material',
+        curveType: 'function',
+        backgroundColor: 'transparent',
         
+
+        hAxis: {
+            title: 'Measurement point',
+            format: 'dd.MM HH:mm',            
+          },
+          vAxes: {0: {logScale: false, maxValue: 3500, minValue: 1000, title:'Moisture', textStyle:{color: '#3366CC'}},
+            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
+          },
+        series:{
+       0:{targetAxisIndex:0},
+       1:{targetAxisIndex:1, pointSize: 5},
+       2:{targetAxisIndex:1}},       
+
+        };
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'Date');
+        data.addColumn('number', 'Moisture');
+        data.addColumn('number', 'NDVI');
 
         var combined = moistures.map(function(e, i) {
-        return [new Date(dates[i]), e];
+        return [new Date(dates[i]), e, null];
         });
+
+
   
         data.addRows(combined);
 
-        
-  
-        var options = {
-          curveType: 'function',
-          
-          hAxis: {
-            title: 'Measurement point',
-            format: 'HH:mm',
-            
-          },
 
-          
-          vAxis: {
-            
-            title: 'Moisture',
-            viewWindow: {
-              max:3500,
-              min:1000
-          }
-          },
-          backgroundColor: 'transparent'
-        };
-  
-        var chart = new google.visualization.LineChart(document.getElementById('soilmoisture_div'));
-        chart.draw(data, options);
-      };
+        var combined1 = ndvis.map(function(e, i) {
 
-      function drawTemperatures() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('datetime', 'X');
-        data.addColumn('number', 'Temperature (°C)');
-
-
-        var combined = temperatures.map(function(e, i) {
-        return [new Date(dates[i]), e];
+        return [new Date(ndvidates[i]), null, e];
         });
-  
-        data.addRows(combined);
 
+
+      data.addRows(combined1);
+
+        var dateRangeSlider = new google.visualization.ControlWrapper({
+        'controlType': 'DateRangeFilter',
+        'containerId': 'soilmoisture_filter_div',
+            'options': {
+            'filterColumnLabel': 'Date',
+            
+            'ui': {
+                        
+              'chartOptions' : {
+                
+                    chartArea : {
+                        width : '99%'
+                        
+                    },
+                    backgroundColor: 'transparent',
+                    theme: 'material'
+                    
+                },
+            }
+        }
+    });
+    var wrapper = new google.visualization.ChartWrapper({
+    chartType: 'LineChart',
+    dataTable: data,
+    options: optionsfortemp,
+    containerId: 'soilmoisture_div'
+});
+
+
+    var dashboard = new google.visualization.Dashboard(document.getElementById('soilmoisture_dashboard_div'));
+    dashboard.bind(dateRangeSlider, wrapper);
+    dashboard.draw(data);
+  };
+
+/*********************************************************************************************************************************/
+
+function drawHumidities() {
+    var optionsfortemp = {
+        theme: 'material',
+        curveType: 'function',
+        backgroundColor: 'transparent',
         
-  
-        var options = {
-          curveType: 'function',
-          
-          
 
-
-          hAxis: {
+        hAxis: {
             title: 'Measurement point',
-            format: 'HH:mm'
-            
+            format: 'dd.MM HH:mm',            
           },
-          vAxis: {
-            viewWindow: {
-              max:40,
-              min:-5
+          vAxes: {0: {logScale: false, maxValue: 100, minValue: 0, title:'Humidity (%)', textStyle:{color: '#3366CC'}},
+            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
           },
-            
-            title: 'Temperature (°C)',
-            
-          },
-          backgroundColor: 'transparent'
+        series:{
+       0:{targetAxisIndex:0},
+       1:{targetAxisIndex:1, pointSize: 5},
+       2:{targetAxisIndex:1}},       
+
         };
-  
-        var chart = new google.visualization.LineChart(document.getElementById('temperature_div'));
-        chart.draw(data, options);
-      };
 
-      function drawLuminosities() {
         var data = new google.visualization.DataTable();
-        data.addColumn('datetime', 'X');
-        data.addColumn('number', 'Luminosity');
-
-        
-
-        var combined = luminosities.map(function(e, i) {
-        return [new Date(dates[i]), e];
-        });
-  
-        data.addRows(combined);
-
-        
-  
-        var options = {
-          curveType: 'function',
-          
-          hAxis: {
-            title: 'Measurement point',
-            format: 'HH:mm',
-            
-          },
-
-          
-          vAxis: {
-            
-            title: 'Luminosity',
-            viewWindow: {
-              max:300,
-              min:0,
-          }
-          },
-          backgroundColor: 'transparent'
-        };
-  
-        var chart = new google.visualization.LineChart(document.getElementById('luminosity_div'));
-        chart.draw(data, options);
-      };
-      
-      function drawHumidities() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('datetime', 'X');
-        data.addColumn('number', 'Humidity (%)');
-
-        
+        data.addColumn('datetime', 'Date');
+        data.addColumn('number', 'Humidity');
+        data.addColumn('number', 'NDVI');
 
         var combined = humidities.map(function(e, i) {
-        return [new Date(dates[i]), e];
+        return [new Date(dates[i]), e, null];
         });
+
+
   
         data.addRows(combined);
 
+
+        var combined1 = ndvis.map(function(e, i) {
+
+        return [new Date(ndvidates[i]), null, e];
+        });
+
+
+      data.addRows(combined1);
+
+        var dateRangeSlider = new google.visualization.ControlWrapper({
+        'controlType': 'DateRangeFilter',
+        'containerId': 'humidity_filter_div',
+            'options': {
+            'filterColumnLabel': 'Date',
+            
+            'ui': {
+                        
+              'chartOptions' : {
+                
+                    chartArea : {
+                        width : '99%'
+                        
+                    },
+                    backgroundColor: 'transparent',
+                    theme: 'material'
+                    
+                },
+            }
+        }
+    });
+    var wrapper = new google.visualization.ChartWrapper({
+    chartType: 'LineChart',
+    dataTable: data,
+    options: optionsfortemp,
+    containerId: 'humidity_div'
+});
+
+
+    var dashboard = new google.visualization.Dashboard(document.getElementById('humidity_dashboard_div'));
+    dashboard.bind(dateRangeSlider, wrapper);
+    dashboard.draw(data);
+  };
+
+
+  /*********************************************************************************************************************************/
+
+  function drawLuminosities() {
+    var optionsfortemp = {
+        theme: 'material',
+        curveType: 'function',
+        backgroundColor: 'transparent',
         
-  
-        var options = {
-          curveType: 'function',
-          
-          hAxis: {
+
+        hAxis: {
             title: 'Measurement point',
-            format: 'HH:mm',
-            
+            format: 'dd.MM HH:mm',            
           },
+          vAxes: {0: {logScale: false, title:'Luminosity', textStyle:{color: '#3366CC'}},
+            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
+          },
+        series:{
+       0:{targetAxisIndex:0},
+       1:{targetAxisIndex:1, pointSize: 5},
+       2:{targetAxisIndex:1}},       
 
-          
-          vAxis: {
-            
-            title: 'Humidity (%)',
-            viewWindow: {
-              max:100,
-              min:0,
-          }
-          },
-          backgroundColor: 'transparent'
         };
-  
-        var chart = new google.visualization.LineChart(document.getElementById('humidity_div'));
-        chart.draw(data, options);
-      };
 
-
-      function drawNDVI() {
         var data = new google.visualization.DataTable();
-        data.addColumn('datetime', 'X');
-        data.addColumn('number', 'NDVI value');
+        data.addColumn('datetime', 'Date');
+        data.addColumn('number', 'Luminosity');
+        data.addColumn('number', 'NDVI');
 
-
-        var combined = ndvis.map(function(e, i) {
-        return [new Date(ndvidates[i]), e];
+        var combined = luminosities.map(function(e, i) {
+        return [new Date(dates[i]), e, null];
         });
+
+
   
         data.addRows(combined);
 
-        
-  
-        var options = {
-          curveType: 'function',
-          
-          
+
+        var combined1 = ndvis.map(function(e, i) {
+
+        return [new Date(ndvidates[i]), null, e];
+        });
 
 
-          hAxis: {
-            title: 'Measurement point',
-            format: 'HH:mm'
+      data.addRows(combined1);
+
+        var dateRangeSlider = new google.visualization.ControlWrapper({
+        'controlType': 'DateRangeFilter',
+        'containerId': 'luminosity_filter_div',
+            'options': {
+            'filterColumnLabel': 'Date',
             
-          },
-          vAxis: {
-            
-            
-            title: 'NDVI value',
-            
-          },
-          backgroundColor: 'transparent'
-        };
-  
-        var chart = new google.visualization.LineChart(document.getElementById('ndvi_div'));
-        chart.draw(data, options);
-      };
-            
+            'ui': {
+                        
+              'chartOptions' : {
+                
+                    chartArea : {
+                        width : '99%'
+                        
+                    },
+                    backgroundColor: 'transparent',
+                    theme: 'material'
+                    
+                },
+            }
+        }
+    });
+    var wrapper = new google.visualization.ChartWrapper({
+    chartType: 'LineChart',
+    dataTable: data,
+    options: optionsfortemp,
+    containerId: 'luminosity_div'
+});
+
+
+    var dashboard = new google.visualization.Dashboard(document.getElementById('luminosity_dashboard_div'));
+    dashboard.bind(dateRangeSlider, wrapper);
+    dashboard.draw(data);
+  };
+
+
 
       
-      </script>
+</script>

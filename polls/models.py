@@ -22,7 +22,7 @@ class Plants(models.Model):
   user = models.ForeignKey(custom_user,on_delete=models.CASCADE)
   nickname = models.CharField(max_length=20, blank=True)
   deviceid = models.CharField(max_length=20)
-  plant_pic = models.ImageField(upload_to='plant_pics', blank=True)
+  plant_pic = models.ImageField(upload_to='images', blank=True)
 
 class NDVIMeasurement(models.Model):
   MeasurementTime = models.DateTimeField(default=datetime.now)

@@ -6,9 +6,16 @@ html {
 }
 
 body {
-  margin-right: 50px;
-  margin-left: 50px;
   background: transparent;
+}
+
+.gt-navbar {
+  background: #f1f8e9 !important;
+  border-bottom: 1px solid #526b2d;
+}
+
+.iconimg {
+  max-height: 40px;
 }
 
 
@@ -19,6 +26,8 @@ link:hover {
 
 .captioncontainer {
   display: flex;
+  flex-direction: column;
+  height: available;
   justify-content: center;
   align-items: center;
 }
@@ -28,86 +37,141 @@ link:hover {
   display: flex;
   flex-direction: row;
   flex-wrap: row;
-  width: 100%;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
   justify-content: center;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.img {
+  align-self: center;
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+img {
+	image-orientation: from-image;
+}
+
+
+.placeholder a {
+  margin: 2px;
+}
+
+.placeholder a i {
+  color: #526b2d !important;
+}
+
+.placeholder span {
+text-align: center;
 }
 
 .imagecontainer {
-  flex-basis: 25%;
-  flex: 1;
+  display: flex;
+  flex-direction: column;
   text-align: center;
   background-color: #f1f8e9;
-  border-radius: 10px;
-  margin: 10px;
-  border: 2px solid #e1e4e8 !important;
-
+  border-radius: 5px;
+  padding: 1.25rem;
+  margin: 10px !important;
+  justify-content: space-between;
+  border: 1px solid #d4d4d4;
 }
 
-#data_button {
-  border-radius: 10px 0 0 0;
-}
-  
-#predictions_button{
-  border-radius: 0 10px 0 0;
+#tabcontainer {
+  background: #f1f8e9 !important;
+  border-radius: 5px;
+  padding: 0 !important;
+  margin: 10px !important;
+  border: 1px solid #d4d4d4;
 }
 
+#chartdiv {
+  background: #f1f8e9 !important;
+  border-radius: 5px;
+  padding: 0 !important;
+  border: 1px solid #d4d4d4;
+  overflow: hidden;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.maincontainer .tab-content {
+  height: calc(100% - (50px)) !important;
+}
+
+#data {
+  height: 100%;
+}
+
+.dataTables_wrapper {
+  height: 100%;
+}
+
+.bootstrap-table {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.fixed-table-pagination {
+  margin-top: auto;
+}
 
 table, th, td, h1 {
 text-align: center;
 }
 
-#data_div, #forms_div, #predictions_div {
-  display: none;
+#data, #ai, #form {
+  padding: 1.25rem;
 }
 
-#tabs_div {
-  overflow: auto;
-}
 
-#forms_div {
+
+#forms-pane {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-#predictions_div, #forms_div, #tabs_div {
-  height: 100%;
-  background: #f1f8e9;
-}
 
-#predictions_div {
+.tab-pane {
   justify-content: center;
   align-items: center;
 }
 
-
-#tabcontainer {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 75%;
-  flex: 2;
-  background-color: white;
-  border-radius: 10px;
-  margin: 10px;
-  border: 2px solid #e1e4e8 !important;
-  height: 602px;
+.fixed-table-body {
+  height: auto !important;
 }
 
-#tab_selection_div {
-  display: flex;
-  flex-direction: row;
+.nav {
+  padding: 0.25rem;
+}
+.page-item.active .page-link {
+  color: #526b2d !important;
+  background-color: #526b2d !important;
 }
 
 
-#tab_selection_div li Button {
-  flex: 1;
-  padding: 0px !important;
-  min-height: 50px;
-  background-color: #f1f8e9;
+.link i {
+  color: black !important;
 }
+
+#tabcontainer a, #chartdiv a {
+color: black !important;
+border: 1px solid #d4d4d4 !important;
+}
+
+.nav-item {
+  background: #f1f8e9 !important;
+}
+
+.nav-link.active {
+  background: linear-gradient(#526b2d,#f1f8e9) !important;
+}
+
 
 
 .caption {
@@ -117,95 +181,99 @@ text-align: center;
   padding-bottom: 20px;
 }
 
-#temperature_div, #humidity_div, #soilmoisture_div, #luminosity_div, #ndvi_div {
-  height: 500px;
+#temperature_div, #humidity_div, #soilmoisture_div, #luminosity_div {
+  min-height: 500px;
   background-color: #f1f8e9;
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  border: 2px solid #e1e4e8 !important;
-  display: none;
+  border-radius: 0 0 5px 5px;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
 }
 
-#tab_selection_div li{
-    text-align: center;
-    list-style-type: none;
-    flex: 1;
-    display: flex; 
+#temperature, #humidity, #moisture, #luminosity {
+  flex-direction: row;
+  display: flex;
 }
 
-#tab_selection_div li Button:focus {
-  outline: none;
+#temperature_ndvi_div, #soilmoisture_ndvi_div, #humidity_ndvi_div, #luminosity_ndvi_div {
+  min-height: 500px;
+  background-color: #f1f8e9;
+  border-radius: 0 0 5px 5px;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
 }
 
-.selected_button {
-  background: linear-gradient(#526b2d,#f1f8e9) !important;
+#temperature_dashboard_div, #soilmoisture_dashboard_div, #humidity_dashboard_div, #luminosity_dashboard_div {
+  display: flex;
+  min-height: 500px;
+  background-color: #f1f8e9;
+  border-radius: 0 0 5px 5px;
+  width: 100%;
+  flex-direction: column;
 }
 
-#charts_div {
-  overflow:auto;
-
-}
-
-#chart_selection_div {
+#graphscontainer {
   display: flex;
   flex-direction: row;
-  margin-left: 10px;
-  margin-right: 10px;
 }
 
-#charts_container{
-  width: 100%;
-  overflow:auto;
+#temperature_filter_div, #soilmoisture_filter_div, #humidity_filter_div, #luminosity_filter_div {
+ margin-top: 5px;
+ display: flex;
+ justify-content: center;
 }
 
-#chart_selection_div li{
-  text-align: center;
-  list-style-type: none;
-  flex: 1;
+
+
+
+
+#containercharts {
   display: flex;
+  flex-direction: row;
 }
 
-#multiselect_button{
-border-radius: 10px 0 0 0;
+#chartdiv .tab-content>.tab-pane {
+  height: 1px;
+  overflow: hidden;
+ visibility: hidden;
 }
-
-#ndvi_button{
-  border-radius: 0 10px 0 0;
+#chartdiv .tab-content>.active {
+  height: auto;
+  overflow: hidden;
+  visibility: visible;
 }
-
-
-
-#chart_selection_div li Button {
-
-  margin-top: 10px;
-  flex: 1;
-  padding: 0px !important;
-  min-height: 50px;
-  background-color: #f1f8e9;
-}
-
-#chart_selection_div li Button:focus {
-  outline: none;
-}
-
 
 @media screen and (min-width: 800px) {
-    .imagecontainer {
-      flex: 1
-    }
-  
-    #tabcontainer {
-      flex: 3
-    }
+  .imagecontainer {
+    flex: 1
   }
 
-  @media screen and (max-width: 1605px) {
-   
-    .maincontainer {
+  #tabcontainer {
+    flex: 3
+  }
+}
+
+@media screen and (max-width: 1760px) {
+
+  #temperature, #humidity, #moisture, #luminosity {
     flex-direction: column;
-    }
-
   }
+
+  .fixed-table-pagination {
+    margin-top: unset;
+  }
+ 
+  .maincontainer {
+  flex-direction: column;
+  }
+  .imagecontainer {
+    flex: 1;
+  }
+
+  #tabcontainer {
+    flex: 1;
+  }
+
+}
   
