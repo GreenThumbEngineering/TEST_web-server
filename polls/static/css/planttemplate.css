@@ -1,5 +1,5 @@
 html {
-  background: url(/static/images/background1.jpg) no-repeat center center fixed; 
+  background: url(/static/images/background5.png) no-repeat center center fixed; 
   background-size: cover;
   overflow-y: scroll;
   
@@ -16,6 +16,7 @@ body {
 
 .iconimg {
   max-height: 40px;
+  margin-right: 7px;
 }
 
 
@@ -166,10 +167,17 @@ border: 1px solid #d4d4d4 !important;
 
 .nav-item {
   background: #f1f8e9 !important;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-link.active {
   background: linear-gradient(#526b2d,#f1f8e9) !important;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
 }
 
 
@@ -251,6 +259,13 @@ border: 1px solid #d4d4d4 !important;
 
   #tabcontainer {
     flex: 3
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .maincontainer, .imagecontainer, #tabcontainer, #chartdiv {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
   }
 }
 

@@ -32,7 +32,8 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0%;
-    background: url(/static/images/frontpage.png) no-repeat center center fixed;
+    background: url(/static/images/frontpage.png);
+    background-size: cover;
     border-right: 2px solid #2e5216;
 }
 

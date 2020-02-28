@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
 {% load static %}
+
+{% load fontawesome_5 %}
+
+{% fontawesome_5_static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/myplants.css' %}">
 
@@ -17,42 +25,48 @@
 		<div class="container">
 
 			{% for plant in plants %}
-			<div class="plantdiv">
-
+			<a class="plantdiv" href="/myplants/{{ plant.0.id }}">
+				{% if not plant.1 %}
+				<div class="arrow-right" style="background-color: red;"><span>{% fa5_icon 'database' 'fas' %}</span></div>
+				{% else %}
+				<div class="arrow-right" style="background-color: #526b2d;"><span>{% fa5_icon 'thumbs-up' 'fas' %}</span></div>
+				{% endif %}
 				<div class="imagecontainer">
 					{% if plant.0.plant_pic %}
-						<a href="/myplants/{{ plant.0.id }}"><img src="{{ plant.0.plant_pic.url }}" class="img"/></a>
+						<img src="{{ plant.0.plant_pic.url }}" class="img"/>
 					{% else %}
-						<a href="/myplants/{{ plant.0.id }}"><img src="/static/images/plant.png" class="img"/></a>
+						<img src="/static/images/plant.png" class="img"/>
 					{% endif %}
 				</div>
 				
 				{% if plant.0.nickname %}
-
-				<a href="/myplants/{{ plant.0.id }}" class="link">{{ plant.0.nickname }}</a>
+				
+				<div class="namecontainer">
+				<p class="link">{{ plant.0.nickname }}</p>
 					{% if not plant.1 %}
-						<a href="/myplants/{{ plant.0.id }}" class="valuelink">Missing values!</a>
+						<p class="valuelink">Missing values!</p>
 					{% endif %}
 				
 				{% else %}
 				
-				<a href="/myplants/{{ plant.0.id }}" class="link">{{ plant.0.deviceid }}</a>
+				<p class="link">{{ plant.0.deviceid }}</p>
 					{% if not plant.1 %}
-						<a href="/myplants/{{ plant.0.id }}" class="valuelink">Missing values!</a>
+						<p class="valuelink">Missing values!</p>
 					{% endif %}
 				
 				{% endif %}
-			
-			</div>
+				</div>
+			</a>
 			{% endfor %}
 
-			<div class="plantdiv">
+			<a class="plantdiv" href="/addplant/">				
 				<div class="imagecontainer">
-					<a href="/addplant/"><img src="/static/images/plus.png" class="img"/></a>
+					<img src="/static/images/plus.png" class="img">
 				</div>
-				
-				<a href="/addplant/" class="link">Add a new plant</a>
-			</div>
+				<div class="namecontainer">
+					<p class="link">Add a new plant</p>
+				</div>
+			</a>
 
 		</div>	
 	</body>

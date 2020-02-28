@@ -20,23 +20,30 @@
 <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/planttemplate.css' %}">
-<head><title>Home Page</title></head>
+<head>
+  <title>Home Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=no">
+</head>
 
 
 <body>
+  
 
   <nav class="navbar navbar-expand-lg navbar-light gt-navbar">
-    <a class="navbar-brand" href="/"><img src="/static/images/greenthumb.png" class="iconimg"/> Greenthumb</a>
+    <a class="navbar-brand brand" href="/"><img src="/static/images/greenthumb.png" class="iconimg"/> Greenthumb</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav w-100 justify-content-center">
         <li class="nav-item active">
           <a class="nav-link" href="/myplants">My plants</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/addplant">Add plant</a>
+        </li>
+        <li class="nav-item ml-auto">         
+          <a class="nav-link" href="#" onClick="document.getElementById('logoutform').submit()">Logout</a>              
         </li>
       </ul>
     </div>
@@ -75,8 +82,8 @@
           <div class="tab-content " id="myTabContent">
             
             <div class="tab-pane show active" id="data" role="tabpanel" aria-labelledby="data-tab">
-              <div class="dataTables_wrapper dt-bootstrap4 no-footer table-responsive" style="width: 100%;">
-                <table class="table dataTable no-footer table-striped" role="grid" data-toggle="table" id="table" data-pagination="true">
+              <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                <table class="table dataTable no-footer table-striped"  role="grid" data-toggle="table" id="table" data-pagination="true">
                   <thead>
                   <tr>
                     <th scope="col">SystemId</th>
@@ -198,6 +205,11 @@
   </div>
 </div>
 
+<form id="logoutform" method="POST" action="{% url 'customuser:logout' %}">
+  {% csrf_token %}
+  <input type="hidden">
+</form>
+
 
 </body>
 
@@ -220,8 +232,10 @@ var humidities = [{% for datarow in plantdatas %} {{ datarow.Humidity }},{% endf
 var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}]
 var luminosities = [{% for datarow in plantdatas %} {{ datarow.Luminosity }},{% endfor %}]
 var ndvis = [{% for datarow in ndvidata %} {{ datarow.NDVI_value }},{% endfor %}]
+var waters = [{% for datarow in waters %} {{ datarow.WaterAdded }},{% endfor %}]
 var dates = {{ dates|safe }}
 var ndvidates = {{ ndvidates|safe }}
+var waterdates = {{ waterdates|safe }}
 
 $(document).ready(function () { 
     $(window).resize(function(){
@@ -244,6 +258,13 @@ function drawTemperatures() {
         theme: 'material',
         curveType: 'function',
         backgroundColor: 'transparent',
+        annotations: {
+            style: 'line',
+            textStyle: {
+            fontSize: 10,
+            },
+            
+        },
 
 
         hAxis: {
@@ -251,12 +272,12 @@ function drawTemperatures() {
             format: 'dd.MM HH:mm',            
           },
           vAxes: {0: {logScale: false, maxValue: 40, minValue: -5, title:'Temperature', textStyle:{color: '#3366CC'}},
-            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
+            1: {logScale: false, maxValue: 0.5, minValue: 0, title:'NDVI', textStyle:{color: '#DC3912'}}
           },
         series:{
        0:{targetAxisIndex:0},
        1:{targetAxisIndex:1, pointSize: 5},
-       2:{targetAxisIndex:1}},       
+       2:{targetAxisIndex:1, type: 'line', lineWidth: 0, tooltip : false}},        
 
         };
 
@@ -264,9 +285,21 @@ function drawTemperatures() {
         data.addColumn('datetime', 'Date');
         data.addColumn('number', 'Temperature');
         data.addColumn('number', 'NDVI');
+        data.addColumn('number', '');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn({type: 'string', role: 'annotationText'});
+
+
+        var combined4 = waters.map(function(e, i) {
+          console.log(e)
+        return [new Date(waterdates[i]), null, null, 0.05, 'Watering', e.toString() + ' millilitres'];
+        
+        });
+  
+        data.addRows(combined4);
 
         var combined = temperatures.map(function(e, i) {
-        return [new Date(dates[i]), e, null];
+          return [new Date(dates[i]), e, null, null, null, null];
         });
 
 
@@ -276,7 +309,7 @@ function drawTemperatures() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-        return [new Date(ndvidates[i]), null, e];
+          return [new Date(ndvidates[i]), null, e, null, null, null];
         });
 
 
@@ -324,19 +357,26 @@ function drawSoilMoistures() {
         theme: 'material',
         curveType: 'function',
         backgroundColor: 'transparent',
+        annotations: {
+            style: 'line',
+            textStyle: {
+            fontSize: 10,
+            },
+            
+        },
         
 
         hAxis: {
             title: 'Measurement point',
             format: 'dd.MM HH:mm',            
           },
-          vAxes: {0: {logScale: false, maxValue: 3500, minValue: 1000, title:'Moisture', textStyle:{color: '#3366CC'}},
-            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
+          vAxes: {0: {logScale: false, maxValue: 3500, minValue: 1000, title:'Soil dryness', textStyle:{color: '#3366CC'}},
+            1: {logScale: false, maxValue: 0.5, minValue: 0, title:'NDVI', textStyle:{color: '#DC3912'}}
           },
         series:{
        0:{targetAxisIndex:0},
        1:{targetAxisIndex:1, pointSize: 5},
-       2:{targetAxisIndex:1}},       
+       2:{targetAxisIndex:1, type: 'line', lineWidth: 0, tooltip : false}},        
 
         };
 
@@ -344,9 +384,21 @@ function drawSoilMoistures() {
         data.addColumn('datetime', 'Date');
         data.addColumn('number', 'Moisture');
         data.addColumn('number', 'NDVI');
+        data.addColumn('number', '');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn({type: 'string', role: 'annotationText'});
+
+
+        var combined4 = waters.map(function(e, i) {
+          console.log(e)
+        return [new Date(waterdates[i]), null, null, 0.05, 'Watering', e.toString() + ' millilitres'];
+        
+        });
+  
+        data.addRows(combined4);
 
         var combined = moistures.map(function(e, i) {
-        return [new Date(dates[i]), e, null];
+          return [new Date(dates[i]), e, null, null, null, null];
         });
 
 
@@ -356,7 +408,7 @@ function drawSoilMoistures() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-        return [new Date(ndvidates[i]), null, e];
+          return [new Date(ndvidates[i]), null, e, null, null, null];
         });
 
 
@@ -403,6 +455,13 @@ function drawHumidities() {
         theme: 'material',
         curveType: 'function',
         backgroundColor: 'transparent',
+        annotations: {
+            style: 'line',
+            textStyle: {
+            fontSize: 10,
+            },
+            
+        },
         
 
         hAxis: {
@@ -410,12 +469,12 @@ function drawHumidities() {
             format: 'dd.MM HH:mm',            
           },
           vAxes: {0: {logScale: false, maxValue: 100, minValue: 0, title:'Humidity (%)', textStyle:{color: '#3366CC'}},
-            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
+            1: {logScale: false, maxValue: 0.5, minValue: 0, title:'NDVI', textStyle:{color: '#DC3912'}}
           },
         series:{
        0:{targetAxisIndex:0},
        1:{targetAxisIndex:1, pointSize: 5},
-       2:{targetAxisIndex:1}},       
+       2:{targetAxisIndex:1, type: 'line', lineWidth: 0, tooltip : false}},        
 
         };
 
@@ -423,9 +482,21 @@ function drawHumidities() {
         data.addColumn('datetime', 'Date');
         data.addColumn('number', 'Humidity');
         data.addColumn('number', 'NDVI');
+        data.addColumn('number', '');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn({type: 'string', role: 'annotationText'});
+
+
+        var combined4 = waters.map(function(e, i) {
+          console.log(e)
+        return [new Date(waterdates[i]), null, null, 0.05, 'Watering', e.toString() + ' millilitres'];
+        
+        });
+  
+        data.addRows(combined4);
 
         var combined = humidities.map(function(e, i) {
-        return [new Date(dates[i]), e, null];
+          return [new Date(dates[i]), e, null, null, null, null];
         });
 
 
@@ -435,7 +506,7 @@ function drawHumidities() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-        return [new Date(ndvidates[i]), null, e];
+          return [new Date(ndvidates[i]), null, e, null, null, null];
         });
 
 
@@ -483,6 +554,13 @@ function drawHumidities() {
         theme: 'material',
         curveType: 'function',
         backgroundColor: 'transparent',
+        annotations: {
+            style: 'line',
+            textStyle: {
+            fontSize: 10,
+            },
+            
+        },
         
 
         hAxis: {
@@ -490,12 +568,12 @@ function drawHumidities() {
             format: 'dd.MM HH:mm',            
           },
           vAxes: {0: {logScale: false, title:'Luminosity', textStyle:{color: '#3366CC'}},
-            1: {logScale: false, maxValue: 1, minValue: -1, title:'NDVI', textStyle:{color: '#DC3912'}}
+            1: {logScale: false, maxValue: 0.5, minValue: 0, title:'NDVI', textStyle:{color: '#DC3912'}}
           },
         series:{
        0:{targetAxisIndex:0},
        1:{targetAxisIndex:1, pointSize: 5},
-       2:{targetAxisIndex:1}},       
+       2:{targetAxisIndex:1, type: 'line', lineWidth: 0, tooltip : false}},   
 
         };
 
@@ -503,9 +581,21 @@ function drawHumidities() {
         data.addColumn('datetime', 'Date');
         data.addColumn('number', 'Luminosity');
         data.addColumn('number', 'NDVI');
+        data.addColumn('number', '');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn({type: 'string', role: 'annotationText'});
+
+
+        var combined4 = waters.map(function(e, i) {
+          console.log(e)
+        return [new Date(waterdates[i]), null, null, 0.05, 'Watering', e.toString() + ' millilitres'];
+        
+        });
+  
+        data.addRows(combined4);
 
         var combined = luminosities.map(function(e, i) {
-        return [new Date(dates[i]), e, null];
+        return [new Date(dates[i]), e, null, null, null, null];
         });
 
 
@@ -515,7 +605,7 @@ function drawHumidities() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-        return [new Date(ndvidates[i]), null, e];
+        return [new Date(ndvidates[i]), null, e, null, null, null];
         });
 
 
