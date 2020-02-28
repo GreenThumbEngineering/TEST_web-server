@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, Http404
 from django.views.generic import TemplateView
-from .models import PlantData, Plants, NDVIMeasurement
+from .models import PlantData, Plants, NDVIMeasurement, Water
 from customuser.models import User
 from django.utils.datastructures import MultiValueDictKeyError
 from datetime import datetime, timedelta
@@ -17,6 +17,7 @@ from django.shortcuts import redirect
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
 from .forms import NDVIForm, WaterForm
+from ai import prediction as prediction
 
 class PlantUpdate(UpdateView):
     model = Plants
@@ -40,6 +41,12 @@ def display(request, id):
     time_threshold = datetime.now() - timedelta(hours=24)
     time_threshold2 = datetime.now() - timedelta(days=7)
     plantinfo = Plants.objects.filter(user=request.user).get(id=id)
+    waters = Water.objects.filter(Plant=plantinfo)
+
+    waterdates = []
+
+    for plant in waters:
+        waterdates.append(str(plant.MeasurementTime))
 
     datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).order_by('-ServerTime') #.filter(ServerTime__gt=time_threshold)
     ndvidata = NDVIMeasurement.objects.filter(Plant=plantinfo) #.filter(MeasurementTime__gt=time_threshold2)
@@ -72,7 +79,7 @@ def display(request, id):
         ndviform = NDVIForm()
         waterform = WaterForm()
 
-    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'ndviform': ndviform, 'waterform': waterform, 'dates': dates, 'ndvidates': ndvidates, 'ndvidata': ndvidata})
+    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'ndviform': ndviform, 'waterform': waterform, 'dates': dates, 'ndvidates': ndvidates, 'ndvidata': ndvidata, 'waters': waters, 'waterdates': waterdates})
 
 @csrf_exempt
 def postdata(request):
