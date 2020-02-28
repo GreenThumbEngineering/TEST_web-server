@@ -11,11 +11,6 @@ class PlantData(models.Model):
   Humidity = models.FloatField(default=0)
   SoilMoisture = models.IntegerField(default=0)
   Luminosity = models.IntegerField(default=0)
-  GivenWater = models.FloatField(default=0)
-  Temperature_pred = models.FloatField(default=0)
-  Luminosity_pred = models.FloatField(default=0)
-  SoilMoisture_pred = models.FloatField(default=0)
-  NDVI_pred = models.FloatField(default=0)
 
 
 class Plants(models.Model):
