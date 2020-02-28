@@ -6,7 +6,9 @@ def makeLinReg(plantdata, timeInterval, lineRange = None):
     """timeInterval = no. of points used to make prediction"""
     l = len(plantdata)
     x = list(range(l))
+    # print(x)
     y = plantdata
+    # print(y)
 
     slope, intercept, r_value, p_value, std_err = stats.linregress(x[timeInterval[0]:timeInterval[1]], y[timeInterval[0]:timeInterval[1]])
 
@@ -46,18 +48,8 @@ def makePred(plantList, slope, intercept, noOfPreds = 1):
     
     return (predX, predY)
 
-def getLinearData(deviceID, temperatures, luminosities, soilMoistures, timeInterval):
+def getLinearData(temperatures, luminosities, soilMoistures, timeInterval, noOfPredictions):
     """
-    Parameters
-    ----
-    temperatures : list
-
-    luminosities : list
-
-    soilMoistures : list
-
-    timeInterval : tuple
-        (starting point, ending point)
     Returns
     ------
     tuple
@@ -67,8 +59,8 @@ def getLinearData(deviceID, temperatures, luminosities, soilMoistures, timeInter
     xregLum, yregLum, LumSlope, LumIntercept, rValLum = makeLinReg(luminosities, timeInterval)
     xregSoilMoist, yregSoilMoist, SoilMoistSlope, SoilMoistIntercept, rValSoilMoist = makeLinReg(soilMoistures, timeInterval)
 
-    tempPred = makePred(temperatures, tempSlope, tempIntercept)[1]
-    lumPred = makePred(luminosities, LumSlope, LumIntercept)[1]
-    soilMoistPred = makePred(soilMoistures, SoilMoistSlope, SoilMoistIntercept)[1]
+    tempPred = makePred(temperatures, tempSlope, tempIntercept, noOfPredictions)[1]
+    lumPred = makePred(luminosities, LumSlope, LumIntercept, noOfPredictions)[1]
+    soilMoistPred = makePred(soilMoistures, SoilMoistSlope, SoilMoistIntercept, noOfPredictions)[1]
 
-    return (deviceID, tempPred, lumPred, soilMoistPred)
+    return (tempPred, lumPred, soilMoistPred)

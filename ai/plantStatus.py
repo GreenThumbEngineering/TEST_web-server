@@ -16,6 +16,8 @@ def needsWater(soilMoisture):
     """
     Returns
     --------
+    -1
+        if too much water?
     0
         if everything is good
     1
@@ -24,7 +26,9 @@ def needsWater(soilMoisture):
         if needs watering right away
     """
 
-    if soilMoisture >= 2200:
+    if soilMoisture >= 2600: # when is too much water?
+        return -1
+    elif 2200 <= soilMoisture < 2600:
         return 0
     elif 1400 <= soilMoisture < 2200:
         return 1
