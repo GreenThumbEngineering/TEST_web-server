@@ -4,6 +4,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+
 {% load static %}
 
 {% load fontawesome_5 %}
@@ -22,14 +28,19 @@
 			</form>
 		</div>
 
-		<div class="container">
+		
+
+		<div class="plantcontainer">
 
 			{% for plant in plants %}
+
+			
+
 			<a class="plantdiv" href="/myplants/{{ plant.0.id }}">
 				{% if not plant.1 %}
-				<div class="arrow-right" style="background-color: red;"><span>{% fa5_icon 'database' 'fas' %}</span></div>
+				<div class="arrow-right" data-toggle="tooltip" data-placement="bottom" title="Missing database values, please check system configuration" style="background-color: red;"><span>{% fa5_icon 'database' 'fas' %}</span></div>
 				{% else %}
-				<div class="arrow-right" style="background-color: #526b2d;"><span>{% fa5_icon 'thumbs-up' 'fas' %}</span></div>
+				<div class="arrow-right" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<p>VPD (Vapor Pressure Deficit) is looking okay, but it could be better.</p> <p>Lowering the temperature by 3°C, or increasing the humidity by 7% would make it even better!</p> <p> If the air is hot or dry, the difference in vapor pressure can be too great and can cause plants to become stressed under rapid transpiration. This can result in nutrient toxicity due to excessive uptake of nutrients (even if fed with just water). </p>" style="background-color: #526b2d; background-color: #DAA520"><span>{% fa5_icon 'wind' 'fas' %}</span></div>
 				{% endif %}
 				<div class="imagecontainer">
 					{% if plant.0.plant_pic %}
@@ -68,6 +79,12 @@
 				</div>
 			</a>
 
-		</div>	
+		</div>
 	</body>
 </html>
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
