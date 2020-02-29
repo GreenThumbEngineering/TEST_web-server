@@ -32,6 +32,7 @@ main {
 .plantdiv:hover {
 	background-color: #7fb05e;
 	border: 2px solid white;
+	text-decoration: none;
 }
 
 
@@ -92,7 +93,6 @@ body {
 
 
 
-
 .imagecontainer {
 	min-height: 200px;
 	display: flex;
@@ -118,7 +118,7 @@ flex-direction: column;
 height: 100%;
 }
 
-.container {
+.plantcontainer {
 justify-content: center;
 display: flex;
 flex-direction: row;
@@ -151,6 +151,7 @@ flex-wrap: wrap;
 	top: -60px;
 	width: 120px;
 	-webkit-transform: rotate(45deg);
+	
   }
 
   .arrow-right span {
@@ -172,4 +173,16 @@ flex-wrap: wrap;
 		display: none;
 	}
 }
+
+* {
+	-webkit-box-sizing: content-box;
+	   -moz-box-sizing: content-box;
+			box-sizing: content-box;
+  }
+  *:before,
+  *:after {
+	-webkit-box-sizing: content-box;
+	   -moz-box-sizing: content-box;
+			box-sizing: content-box;
+  }
 
