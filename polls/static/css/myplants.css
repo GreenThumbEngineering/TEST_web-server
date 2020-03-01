@@ -45,6 +45,10 @@ main {
 	color: white;
 }
 
+.plantdiv:hover .values {
+	color: white;
+}
+
 .plantdiv img {
 	width: 100%;
 }
@@ -67,27 +71,31 @@ body {
 	flex-direction: column;
 	align-self: self-end;
 	width: 100%;
-	padding-top: 25px;
-	padding-bottom: 20px;
-	text-align: center;
 	text-decoration: none;
 	color: #526b2d;
 	font-family: Tahoma, Geneva, sans-serif;
+	margin: 0 !important;
 }
 
 .valuelink {
 	font-family: Tahoma, Geneva, sans-serif;
-	text-align: center;
 	display: inline-block;
 	flex-direction: column;
 	align-self: self-end;
 	width: 100%;
-	padding-top: 25px;
-	padding-bottom: 20px;
-	text-align: center;
 	text-decoration: none;
 	color: red;
 	font-family: Tahoma, Geneva, sans-serif;
+}
+
+.valueicons {
+	color: black;
+	text-align: center;
+}
+
+.values {
+	margin-left: 8px;
+	color: #526b2d;
 }
 
 
@@ -104,10 +112,31 @@ body {
 .namecontainer {
 	display: flex;
 	flex-direction: column;
-	margin: 20px;
 	width: 100%;
-	flex: 3;
+	flex: 1;
 	justify-content: center;
+}
+
+.desccontainer {
+	flex: 3;
+	margin: 10px;
+	margin-left: 30px;
+	margin-right: 40px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.valuecontainer {
+	flex: 3;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.iconcontainer, .datacontainer {
+	display: flex;
+	flex-direction: column;
 }
 
 .description {
@@ -162,6 +191,31 @@ flex-wrap: wrap;
 	top: 90px;
 	position: absolute;
 	-webkit-transform: rotate(-45deg);
+  }
+
+  .nav-item {
+	background: #f1f8e9 !important;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .nav-link.active {
+	background: linear-gradient(#526b2d,#f1f8e9) !important;
+  }
+  
+  .brand {
+	display: flex;
+	align-items: center;
+  }
+
+  .gt-navbar {
+	background: #f1f8e9 !important;
+	border-bottom: 1px solid #526b2d;
+  }
+  
+  .iconimg {
+	max-height: 40px;
+	margin-right: 7px;
   }
 
 @media screen and (max-width: 500px) {
