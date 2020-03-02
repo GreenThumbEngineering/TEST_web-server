@@ -38,10 +38,12 @@ def frontpage(request):
 
 def display(request, id):
 
+
     time_threshold = datetime.now() - timedelta(hours=24)
     time_threshold2 = datetime.now() - timedelta(days=7)
     plantinfo = Plants.objects.filter(user=request.user).get(id=id)
     waters = Water.objects.filter(Plant=plantinfo)
+
 
     waterdates = []
 
@@ -120,14 +122,15 @@ def postdata(request):
 
 def myplants(request):
     if request.user.is_authenticated:
-        plants = Plants.objects.filter(user=request.user.id)
+        plants = Plants.objects.filter(user=request.user.id).order_by('nickname')
         time_threshold = datetime.now() - timedelta(hours=4)
         plantswithdata = []
+
         for plant in plants:
             if PlantData.objects.filter(DeviceId=plant.deviceid).exists():
-                plantswithdata.append([plant, PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime').ServerTime.replace(tzinfo=None) > time_threshold.replace(tzinfo=None)])
+                plantswithdata.append([plant, PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime').ServerTime.replace(tzinfo=None) > time_threshold.replace(tzinfo=None), PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime')])
             else: 
-                plantswithdata.append([plant, bool(False)])
+                plantswithdata.append([plant, bool(False), PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime')])
         return render(request, 'myplants.html', {'plants': plantswithdata})
     else:
         return redirect('/')

@@ -13,22 +13,30 @@
 
 <div class="container">
 
-<div class="loginform">
+  <div class="content">
 
-<span class="logintext">Add a new plant to system</span>
+    <div class="loginform">
 
-<form action="{% url 'addplant' %}" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form }}
-  <input class="button" type="submit" value="Add">
-</form>
+    <span class="logintext">Add a new plant to system</span>
+
+    <form action="{% url 'addplant' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form }}
+      <input class="button" type="submit" value="Add">
+    </form>
+
+    </div>
+
+    <div class="instructions">
+      <p>Supposed</p>
+      <p>to</p>
+      <p>contain</p>
+      <p>instructions</p>
+    </div>
+
+  </div>
 
 </div>
-</div>
-
-
-</div>
-
 
 </body>
 

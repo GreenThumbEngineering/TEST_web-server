@@ -155,7 +155,7 @@
         <a class="nav-link chart-nav-link" id="humidity-tab" data-toggle="tab" href="#humidity" role="tab" aria-controls="humidity" aria-selected="false">Humidity {% fa5_icon 'wind' 'fas' %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link chart-nav-link" id="moisture-tab" data-toggle="tab" href="#moisture" role="tab" aria-controls="moisture" aria-selected="false">Soil moisture {% fa5_icon 'tint' 'fas' %}</a>
+        <a class="nav-link chart-nav-link" id="moisture-tab" data-toggle="tab" href="#moisture" role="tab" aria-controls="moisture" aria-selected="false">Soil dryness {% fa5_icon 'tint' 'fas' %}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link chart-nav-link" id="luminosity-tab" data-toggle="tab" href="#luminosity" role="tab" aria-controls="luminosity" aria-selected="false">Luminosity {% fa5_icon 'sun' 'fas' %}</a>
@@ -383,7 +383,7 @@ function drawSoilMoistures() {
 
         var data = new google.visualization.DataTable();
         data.addColumn('datetime', 'Date');
-        data.addColumn('number', 'Moisture');
+        data.addColumn('number', 'Dryness');
         data.addColumn('number', 'NDVI');
         data.addColumn('number', '');
         data.addColumn({type: 'string', role: 'annotation'});
