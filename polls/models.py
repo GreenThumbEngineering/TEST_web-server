@@ -4,7 +4,7 @@ from datetime import datetime
 
 class PlantData(models.Model):
   DeviceId = models.CharField(max_length = 20, default='')
-  SystemId = models.CharField(max_length = 20, default='')
+  SystemId = models.CharField(max_length = 25, default='')
   MeasurementTime = models.DateTimeField(default=datetime.now)
   ServerTime = models.DateTimeField(default=datetime.now)
   Temperature = models.FloatField(default=0)
