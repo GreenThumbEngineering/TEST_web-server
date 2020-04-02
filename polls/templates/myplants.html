@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 
+{% include 'default.html' %}
+
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>My plants</title>
 </head>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -17,29 +20,10 @@
 {% fontawesome_5_static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/myplants.css' %}">
+<link rel=icon href=/static/images/greenthumb.png>
 
 <html lang="en">
 	<body>
-
-		<nav class="navbar navbar-expand-lg navbar-light gt-navbar">
-			<a class="navbar-brand brand" href="/"><img src="/static/images/greenthumb.png" class="iconimg"/> Greenthumb</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			  <span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-			  <ul class="navbar-nav w-100 justify-content-center">
-				<li class="nav-item active">
-				  <a class="nav-link" href="/myplants">My plants</a>
-				</li>
-				<li class="nav-item">
-				  <a class="nav-link" href="/addplant">Add plant</a>
-				</li>
-				<li class="nav-item ml-auto">         
-				  <a class="nav-link" href="#" onClick="document.getElementById('logoutform').submit()">Logout</a>              
-				</li>
-			  </ul>
-			</div>
-		  </nav>
 
 
 		<div class="plantcontainer">
@@ -47,10 +31,14 @@
 			{% for plant in plants %}			
 
 			<a class="plantdiv" href="/myplants/{{ plant.0.id }}">
-				{% if not plant.1 %}
+				{% if plant.2 == "2" %}
 					<div class="arrow-right" data-toggle="tooltip" data-placement="bottom" title="Missing database values, please check sensor chip status!" style="background-color: red;"><span>{% fa5_icon 'database' 'fas' %}</span></div>
-					{% else %}
-					<div class="arrow-right" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<p>VPD (Vapor Pressure Deficit) is looking okay, but it could be better.</p> <p>Lowering the temperature by 3°C, or increasing the humidity by 7% would make it even better!</p> <p> If the air is hot or dry, the difference in vapor pressure can be too great and can cause plants to become stressed under rapid transpiration. This can result in nutrient toxicity due to excessive uptake of nutrients (even if fed with just water). </p>" style="background-color: #526b2d; background-color: #DAA520"><span>{% fa5_icon 'wind' 'fas' %}</span></div>
+				{% elif plant.2 == "1" %}
+					<div class="arrow-right" data-toggle="tooltip" data-html="true" data-placement="bottom" title="{{ plant.3 }}" style="background-color: #DAA520"><span>{% fa5_icon 'wind' 'fas' %}</span></div>
+				{% elif plant.2 == "0" %}
+    				<div class="arrow-right" data-toggle="tooltip" data-html="true" data-placement="bottom" title="" style="background-color: #526b2d"><span style="top: 86px !important">{% fa5_icon 'thumbs-up' 'fas' %}</span></div>
+				{% else %}
+					<div class="arrow-right" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Configuration problem, please contact admin!" style="background-color: red;"><span>{% fa5_icon 'question' 'fas' %}</span></div>
 				{% endif %}
 
 				<div class="imagecontainer">
@@ -90,10 +78,10 @@
 
 					<div class="datacontainer">
 
-						<span class="values">{{ plant.2.Temperature }} °C</span>
-						<span class="values">{{ plant.2.Humidity }} %</span>
-						<span class="values">{{ plant.2.SoilMoisture }}</span>
-						<span class="values">{{ plant.2.Luminosity }}</span>
+						<span class="values">{{ plant.1.Temperature }} °C</span>
+						<span class="values">{{ plant.1.Humidity }} %</span>
+						<span class="values">{{ plant.1.SoilMoisture }}</span>
+						<span class="values">{{ plant.1.Luminosity }}</span>
 
 					</div>
 

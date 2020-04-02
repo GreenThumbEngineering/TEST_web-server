@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.shortcuts import render, Http404
 from django.views.generic import TemplateView
-from .models import PlantData, Plants, NDVIMeasurement, Water
+from .models import PlantData, Plants, Water
 from customuser.models import User
 from django.utils.datastructures import MultiValueDictKeyError
 from datetime import datetime, timedelta
@@ -16,8 +16,18 @@ from .forms import PlantsForm
 from django.shortcuts import redirect
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
-from .forms import NDVIForm, WaterForm
+from .forms import WaterForm
 from ai import prediction as prediction
+from polls import imageprocess as process
+from polls import omiparsers
+from polls import vpd as VPD
+from django.conf import settings
+from polls.models import PlantData
+import xml.etree.ElementTree as ET
+from dicttoxml import dicttoxml
+from xml.dom.minidom import parseString
+from math import exp
+from django.utils import timezone
 
 class PlantUpdate(UpdateView):
     model = Plants
@@ -30,87 +40,88 @@ class PlantUpdate(UpdateView):
             raise Http404
         return super(UpdateView, self).dispatch(request, *args, **kwargs)
 
+class PlantDataUpdate(UpdateView):
+    model = PlantData
+    template_name_suffix = '_update_form'
+    fields = ['NDVI_grade']
+    success_url = "/grade"
+    
+    def get_object(self, queryset=None):
+        try:
+            return PlantData.objects.filter(NDVI_grade__isnull=True).order_by('ServerTime')[0]
+        except:
+            return redirect('/') 
+    
+
 def frontpage(request):
     if request.user.is_authenticated:
         return myplants(request)
     else: 
         return render(request, 'frontpage.html')
 
+
 def display(request, id):
-
-
-    time_threshold = datetime.now() - timedelta(hours=24)
-    time_threshold2 = datetime.now() - timedelta(days=7)
     plantinfo = Plants.objects.filter(user=request.user).get(id=id)
+    
     waters = Water.objects.filter(Plant=plantinfo)
-
-
     waterdates = []
 
     for plant in waters:
         waterdates.append(str(plant.MeasurementTime))
 
-    datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).order_by('-ServerTime') #.filter(ServerTime__gt=time_threshold)
-    ndvidata = NDVIMeasurement.objects.filter(Plant=plantinfo) #.filter(MeasurementTime__gt=time_threshold2)
+    datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).order_by('-ServerTime')
 
     dates = []
-    ndvidates = []
 
     for plant in datas:
         dates.append(str(plant.ServerTime))
-    
-    for plant in ndvidata:
-        ndvidates.append(str(plant.MeasurementTime))
 
     if request.method == 'POST':
-        if request.POST.get('NDVI_value'):
-            ndviform = NDVIForm(request.POST)
-
-            if ndviform.is_valid():
-                ndviform.instance.Plant = plantinfo
-                ndviform.save()
-                waterform = WaterForm()
-        else: 
-            waterform = WaterForm(request.POST)
+        waterform = WaterForm(request.POST)
             
-            if waterform.is_valid():
-                waterform.instance.Plant = plantinfo
-                waterform.save()
-                ndviform = NDVIForm()
-    else:    
-        ndviform = NDVIForm()
+        if waterform.is_valid():
+            waterform.instance.Plant = plantinfo
+            waterform.save()
+    else:
         waterform = WaterForm()
 
-    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'ndviform': ndviform, 'waterform': waterform, 'dates': dates, 'ndvidates': ndvidates, 'ndvidata': ndvidata, 'waters': waters, 'waterdates': waterdates})
+    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'waterform': waterform, 'dates': dates, 'waters': waters, 'waterdates': waterdates})
 
 @csrf_exempt
 def postdata(request):
     if request.method == "POST":
         try:
-            systemId = request.POST.get('SystemId')
-            hasBeenRegistered = User.objects.filter(deviceID = request.POST.get('SystemId'))
-            measurementTime = datetime.fromtimestamp(int(request.POST.get('MeasurementTime')))
+
+            datarequest, rasp_id = omiparsers.WriteParser.main(request.POST['omi_message'])
+
+            hasBeenRegistered = User.objects.filter(deviceID = rasp_id)
             
-            if hasBeenRegistered.count() > 0:               
-                for users in hasBeenRegistered:
-                    plants = Plants.objects.filter(user_id = users.id)
-                    
-                    deviceids = []
+            if hasBeenRegistered.exists():
 
-                    for plant in plants:
-                        deviceids.append(plant.deviceid)
+                for esp in datarequest.keys():
 
-                    
-                    if request.POST.get('DeviceId') not in deviceids:
-                        plant = Plants()
-                        plant.user_id = users.id
-                        plant.nickname = request.POST.get('DeviceId')
-                        plant.deviceid = request.POST.get('DeviceId')
-                        plant.save()
 
-                plantData = PlantData.objects.create(DeviceId = request.POST.get('DeviceId'), SystemId = request.POST.get('SystemId'), MeasurementTime = measurementTime,   Temperature = float(request.POST.get('Temperature')), Humidity = float(request.POST.get('Humidity')) , SoilMoisture = int(request.POST.get('SoilMoisture')), Luminosity = int(request.POST.get('Luminosity')))
+                    plantData = PlantData()
+                    plantData.DeviceId =        datarequest[esp]['DeviceId']                    
+                    plantData.SystemId =        datarequest[esp]['SystemId']
+                    plantData.Temperature =     datarequest[esp]['Temperature']                   
+                    plantData.Humidity =        datarequest[esp]['Humidity']                    
+                    plantData.SoilMoisture =    datarequest[esp]['SoilMoisture']                   
+                    plantData.Luminosity =      datarequest[esp]['Luminosity']
+                    plantData.White_pic =       request.FILES['white_pic']
+                    plantData.Nir_pic =         request.FILES['nir_pic']
+                    plantData.VPD =             VPD.VPD.calcvpd(float(datarequest[esp]['Temperature']), float(datarequest[esp]['Humidity']))
+
+                    plantData.save()
+
+
+                ndvi = process.main(settings.BASE_DIR + "/polls" + plantData.White_pic.url, settings.BASE_DIR + "/polls" + plantData.Nir_pic.url)              
+                plantData.NDVI_value = ndvi
+
                 plantData.save()
-                return HttpResponse('')
+
+                print('ESP: ' + datarequest[esp]['DeviceId'] + ' - RASP:' + datarequest[esp]['SystemId'] + ' - NDVI:' + str(ndvi))
+                return HttpResponse('200' + ' - ESP: ' + datarequest[esp]['DeviceId'] + ' - RASP:' + datarequest[esp]['SystemId'] + ' - NDVI:' + str(ndvi))
             else:
                 raise Http404
             
@@ -123,14 +134,32 @@ def postdata(request):
 def myplants(request):
     if request.user.is_authenticated:
         plants = Plants.objects.filter(user=request.user.id).order_by('nickname')
-        time_threshold = datetime.now() - timedelta(hours=4)
+        time_threshold = timezone.now() - timedelta(hours=2)
         plantswithdata = []
 
         for plant in plants:
             if PlantData.objects.filter(DeviceId=plant.deviceid).exists():
-                plantswithdata.append([plant, PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime').ServerTime.replace(tzinfo=None) > time_threshold.replace(tzinfo=None), PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime')])
-            else: 
-                plantswithdata.append([plant, bool(False), PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime')])
+
+                #Latest row of plantdata for this plant sorted by ServerTime
+                datarow = PlantData.objects.filter(DeviceId=plant.deviceid).latest('ServerTime')
+
+                #Status:
+                # 0 equals Good, no problems
+                # 1 equals VPD problem
+                # 2 equals problem with database or RASP connection
+
+                #status, statustext = VPD.analyze(datarow.Temperature, datarow.Humidity)
+
+                if datarow.ServerTime < time_threshold:
+                    plantswithdata.append([plant, datarow, "2", "DB problem"])
+                #elif status: #If VPD analysis returns problematic values
+                    #plantswithdata.append([plant, datarow, "1", statustext])
+                else:
+                    plantswithdata.append([plant, datarow, "0", "Status OK"])
+
+            else:
+                plantswithdata.append([plant, "2", None, "DB"])
+
         return render(request, 'myplants.html', {'plants': plantswithdata})
     else:
         return redirect('/')

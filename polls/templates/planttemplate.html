@@ -20,8 +20,9 @@
 <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/planttemplate.css' %}">
+<link rel=icon href=/static/images/greenthumb.png>
 <head>
-  <title>Home Page</title>
+  <title>Plant page</title>
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=no">
 </head>
 
@@ -42,6 +43,9 @@
         <li class="nav-item">
           <a class="nav-link" href="/addplant">Add plant</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/grade">Grade plants</a>
+      </li>
         <li class="nav-item ml-auto">         
           <a class="nav-link" href="#" onClick="document.getElementById('logoutform').submit()">Logout</a>              
         </li>
@@ -72,7 +76,7 @@
               <a class="nav-link active" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="true">View data {% fa5_icon 'database' 'fas' %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="false">Add water/NDVI {% fa5_icon 'wpforms' 'fab' %}</a>
+              <a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="false">Add water {% fa5_icon 'wpforms' 'fab' %}</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" id="ai-tab" data-toggle="tab" href="#ai" role="tab" aria-controls="ai" aria-selected="false">Predictions {% fa5_icon 'robot' 'fas' %}</a>
@@ -90,8 +94,9 @@
                     <th scope="col">ServerTime</th>
                     <th scope="col">Temperature</th>
                     <th scope="col">Humidity</th>
-                    <th scope="col">Soil moisture</th>                    
+                    <th scope="col">Soil dryness</th>                    
                     <th scope="col">Luminosity</th>
+                    <th scope="col">VPD</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -103,6 +108,7 @@
                     <td>{{ datarow.Humidity }}</td>
                     <td>{{ datarow.SoilMoisture }}</td>                   
                     <td>{{ datarow.Luminosity }}</td>
+                    <td>{{ datarow.VPD|floatformat:"-2" }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -112,20 +118,6 @@
 
 
             <div class="tab-pane" id="form" role="tabpanel" aria-labelledby="form-tab">
-              <form method="post">
-                {% csrf_token %}
-                
-                {% for field in ndviform %}
-                <div class="fieldWrapper">
-                  {{ field.errors }}
-                  {{ field.label_tag }} {{ field }} <input type="submit" value="Submit">
-                  {% if field.help_text %}
-                  <p class="help">{{ field.help_text|safe }}</p>
-                  {% endif %}
-                </div>
-                {% endfor %}
-                
-              </form>
             
               <form method="post">
                 {% csrf_token %}
@@ -159,6 +151,9 @@
       </li>
       <li class="nav-item">
         <a class="nav-link chart-nav-link" id="luminosity-tab" data-toggle="tab" href="#luminosity" role="tab" aria-controls="luminosity" aria-selected="false">Luminosity {% fa5_icon 'sun' 'fas' %}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link chart-nav-link" id="vpd-tab" data-toggle="tab" href="#vpd" role="tab" aria-controls="vpd" aria-selected="false">VPD {% fa5_icon 'leaf' 'fas' %}</a>
       </li>
     </ul>
 
@@ -202,6 +197,17 @@
           <div id="luminosity_filter_div"></div>
         </div>    
       </div>
+
+      <div class="tab-pane" id="vpd" role="tabpanel" aria-labelledby="vpd-tab">
+        <div id="vpd_dashboard_div">
+          <div id="graphscontainer">
+            <div id="vpd_div"></div>
+          </div>
+          <div id="vpd_filter_div"></div>
+        </div>    
+      </div>
+
+
   </div>
 </div>
 
@@ -222,19 +228,19 @@
   
 history.replaceState(null, document.title, location.href);
 
-google.charts.load('current', {packages: ['corechart', 'line', 'controls'], callback: drawTemperatures, drawHumidities, drawSoilMoistures, drawLuminosities});
-google.charts.load('visualization', '1', { packages: ['corechart', 'controls'], callback: drawTemperatures, drawHumidities, drawSoilMoistures, drawLuminosities });
+google.charts.load('current', {packages: ['corechart', 'line', 'controls'], callback: drawTemperatures, drawHumidities, drawSoilMoistures, drawLuminosities, drawVPD});
+google.charts.load('visualization', '1', { packages: ['corechart', 'controls'], callback: drawTemperatures, drawHumidities, drawSoilMoistures, drawLuminosities, drawVPD });
 
-
+var None = null
 
 var temperatures = [{% for datarow in plantdatas %} {{ datarow.Temperature }},{% endfor %}]
 var humidities = [{% for datarow in plantdatas %} {{ datarow.Humidity }},{% endfor %}]
 var moistures = [{% for datarow in plantdatas %} {{ datarow.SoilMoisture }},{% endfor %}]
 var luminosities = [{% for datarow in plantdatas %} {{ datarow.Luminosity }},{% endfor %}]
-var ndvis = [{% for datarow in ndvidata %} {{ datarow.NDVI_value }},{% endfor %}]
+var vpds = [{% for datarow in plantdatas %} {{ datarow.VPD }},{% endfor %}]
+var ndvis = [{% for datarow in plantdatas %} {{ datarow.NDVI_value }},{% endfor %}]
 var waters = [{% for datarow in waters %} {{ datarow.WaterAdded }},{% endfor %}]
 var dates = {{ dates|safe }}
-var ndvidates = {{ ndvidates|safe }}
 var waterdates = {{ waterdates|safe }}
 
 
@@ -243,14 +249,16 @@ $(document).ready(function () {
       drawHumidities();
       drawSoilMoistures();
       drawLuminosities();
-      drawTemperatures();   
+      drawTemperatures(); 
+      drawVPD();    
     });
     $(".chart-nav-link").on('click', function(event) {
     event.preventDefault();
     drawHumidities();
     drawSoilMoistures();
     drawLuminosities();
-    drawTemperatures();  
+    drawTemperatures();
+    drawVPD();      
 });
 });      
 
@@ -310,7 +318,7 @@ function drawTemperatures() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-          return [new Date(ndvidates[i]), null, e, null, null, null];
+          return [new Date(dates[i]), null, e, null, null, null];
         });
 
 
@@ -409,7 +417,7 @@ function drawSoilMoistures() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-          return [new Date(ndvidates[i]), null, e, null, null, null];
+          return [new Date(dates[i]), null, e, null, null, null];
         });
 
 
@@ -507,7 +515,7 @@ function drawHumidities() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-          return [new Date(ndvidates[i]), null, e, null, null, null];
+          return [new Date(dates[i]), null, e, null, null, null];
         });
 
 
@@ -553,7 +561,6 @@ function drawHumidities() {
   function drawLuminosities() {
     var optionsfortemp = {
         theme: 'material',
-        curveType: 'function',
         backgroundColor: 'transparent',
         annotations: {
             style: 'line',
@@ -606,7 +613,7 @@ function drawHumidities() {
 
         var combined1 = ndvis.map(function(e, i) {
 
-        return [new Date(ndvidates[i]), null, e, null, null, null];
+        return [new Date(dates[i]), null, e, null, null, null];
         });
 
 
@@ -642,6 +649,104 @@ function drawHumidities() {
 
 
     var dashboard = new google.visualization.Dashboard(document.getElementById('luminosity_dashboard_div'));
+    dashboard.bind(dateRangeSlider, wrapper);
+    dashboard.draw(data);
+  };
+
+  /*********************************************************************************************************************************/
+
+  function drawVPD() {
+    var optionsfortemp = {
+        theme: 'material',
+        curveType: 'function',
+        backgroundColor: 'transparent',
+        annotations: {
+            style: 'line',
+            textStyle: {
+            fontSize: 10,
+            },
+            
+        },
+        
+
+        hAxis: {
+            title: 'Measurement point',
+            format: 'dd.MM HH:mm',            
+          },
+          vAxes: {0: {logScale: false, maxValue: 10, minValue: 0, title:'VPD', textStyle:{color: '#3366CC'}},
+            1: {logScale: false, maxValue: 0.5, minValue: 0, title:'NDVI', textStyle:{color: '#DC3912'}}
+          },
+        series:{
+       0:{targetAxisIndex:0},
+       1:{targetAxisIndex:1, pointSize: 5},
+       2:{targetAxisIndex:1, type: 'line', lineWidth: 0, tooltip : false}},   
+
+        };
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('datetime', 'Date');
+        data.addColumn('number', 'VPD');
+        data.addColumn('number', 'NDVI');
+        data.addColumn('number', '');
+        data.addColumn({type: 'string', role: 'annotation'});
+        data.addColumn({type: 'string', role: 'annotationText'});
+
+
+        var combined4 = waters.map(function(e, i) {
+          console.log(e)
+        return [new Date(waterdates[i]), null, null, 0.05, 'Watering', e.toString() + ' millilitres'];
+        
+        });
+  
+        data.addRows(combined4);
+
+        var combined = vpds.map(function(e, i) {
+        return [new Date(dates[i]), e, null, null, null, null];
+        });
+
+
+  
+        data.addRows(combined);
+
+
+        var combined1 = ndvis.map(function(e, i) {
+
+        return [new Date(dates[i]), null, e, null, null, null];
+        });
+
+
+      data.addRows(combined1);
+
+        var dateRangeSlider = new google.visualization.ControlWrapper({
+        'controlType': 'DateRangeFilter',
+        'containerId': 'vpd_filter_div',
+            'options': {
+            'filterColumnLabel': 'Date',
+            
+            'ui': {
+                        
+              'chartOptions' : {
+                
+                    chartArea : {
+                        width : '99%'
+                        
+                    },
+                    backgroundColor: 'transparent',
+                    theme: 'material'
+                    
+                },
+            }
+        }
+    });
+    var wrapper = new google.visualization.ChartWrapper({
+    chartType: 'LineChart',
+    dataTable: data,
+    options: optionsfortemp,
+    containerId: 'vpd_div'
+});
+
+
+    var dashboard = new google.visualization.Dashboard(document.getElementById('vpd_dashboard_div'));
     dashboard.bind(dateRangeSlider, wrapper);
     dashboard.draw(data);
   };
