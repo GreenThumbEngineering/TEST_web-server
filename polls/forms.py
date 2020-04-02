@@ -1,7 +1,8 @@
 from django import forms
 from polls.models import UserProfileInfo
 from polls.models import Plants
-from polls.models import Water, NDVIMeasurement
+from polls.models import Water
+from polls.models import PlantData
 
 from django.contrib.auth.models import User
 class UserForm(forms.ModelForm):
@@ -19,16 +20,10 @@ class UserProfileInfoForm(forms.ModelForm):
 class PlantsForm(forms.ModelForm):
     class Meta:
         model = Plants
-        fields = ('deviceid', 'nickname', 'plant_pic')
+        fields = ('deviceid', 'nickname', 'plant_pic', 'plantpot_size', 'plant_type')
 
 class WaterForm(forms.ModelForm):
     class Meta:
         model = Water
         fields = ('WaterAdded',)
-
-class NDVIForm(forms.ModelForm):
-    class Meta:
-        model = NDVIMeasurement
-        fields = ('NDVI_value',)
-
     

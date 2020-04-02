@@ -1,0 +1,54 @@
+<html>
+
+{% include 'default.html' %}
+
+{% load static %}
+{% load extras %}
+    
+    
+{% load fontawesome_5 %}
+    
+{% fontawesome_5_static %}
+
+<head>
+    <title>Grade plant</title>
+</head>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/plants_update_form.css' %}">
+
+<body>
+    <div class="datacontainer">
+        <div class="content">
+            <div class="loginform">
+                <img src="{{ form.instance.White_pic.url }}" style="max-width: 1000px;" class="img"/>  
+                <p>{{ form.instance.DeviceId }}</p> 
+                <p>{{ form.instance.ServerTime }}</p> 
+
+                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                {{ form.as_p }}
+                <input id="button" class="button" type="submit" value="Submit grade">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        document.getElementById('id_NDVI_grade').focus();
+        document.addEventListener('keyup', function(event) {
+            if (event.keyCode === 13) {
+                document.getElementById("button").click();
+            }
+        });  
+    });
+</script>

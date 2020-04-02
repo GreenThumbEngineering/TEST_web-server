@@ -1,0 +1,82 @@
+.container, html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.rightcolumn {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.leftcolumn img {
+    max-width: 50%;
+}
+
+.leftcolumn {
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    background: url(/static/images/frontpage.png);
+    background-size: cover;
+    border-right: 2px solid #2e5216;
+}
+
+.button {
+    margin: 20px;
+    text-decoration: none;
+    background-color: #c6eaae;
+    padding-left: 8%;
+    padding-right: 8%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    border: 1px solid #2e5216;
+    color: #2e5216;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+    font-weight: bolder;
+}
+
+.button a {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+    color: #2e5216;
+    font-weight: bolder;
+}
+
+.slogan {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: #2e5216;
+    margin-bottom: 5%;
+}
+
+#aalto {
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    max-width: 100px;
+}
+
+@media screen and (max-width: 800px) {
+   
+    .leftcolumn {
+    display: none;
+    }
+
+  }

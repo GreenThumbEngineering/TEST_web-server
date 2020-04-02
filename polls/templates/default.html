@@ -1,0 +1,45 @@
+<html>
+
+{% load static %}
+{% load extras %} 
+{% load fontawesome_5 %}  
+{% fontawesome_5_static %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}">
+<link rel=icon href=/static/images/greenthumb.png>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light gt-navbar">
+    <a class="navbar-brand brand" href="/"><img src="/static/images/greenthumb.png" class="iconimg"/> Greenthumb</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav w-100 justify-content-center">
+      <li class="nav-item">
+        <a class="nav-link" href="/myplants">My plants</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/addplant">Add plant</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/grade">Grade plants</a>
+      </li>
+      <li class="nav-item ml-auto">         
+        <a class="nav-link" href="#" onClick="document.getElementById('logoutform').submit()">Logout</a>              
+      </li>
+      </ul>
+    </div>
+</nav>
+
+</body>
+
+</html>
+

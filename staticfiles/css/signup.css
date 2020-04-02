@@ -1,0 +1,73 @@
+.container, html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: url(/static/images/frontpage.png) no-repeat center center fixed;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+}
+
+.loginform {
+  padding: 20px;
+  border-radius: 20px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #2e5216;
+}
+
+.logintext {
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #2e5216;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.button {
+  margin-top: 20px;
+  width: 100%;
+  text-decoration: none;
+  background-color: #c6eaae;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 20px;
+  border: 1px solid #2e5216;
+  color: #2e5216;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+  font-weight: bolder;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+input, label {
+  display:block;
+}
+
+label {
+  padding-bottom: 10px;
+}
+
+input {
+  width: 100%;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: groove;
+  border-color: #2e5216;
+  font-size: 20px;
+}
+
+p, input {
+}
