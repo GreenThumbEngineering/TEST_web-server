@@ -16,6 +16,7 @@ class PlantData(models.Model):
   Nir_pic = models.ImageField(upload_to='images')
 
   grades = (
+    (0, '0'),
     (1, '1'),
     (2, '2'),
     (3, '3'),

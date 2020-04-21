@@ -1,0 +1,144 @@
+<html>
+
+{% load static %}
+
+{% include 'default.html' %}
+
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/addplant.css' %}"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/odfread.css' %}">
+
+<head>
+<script language="javascript" type="text/javascript">
+    
+    function addtext() {
+        var teksti = document.getElementById("odfrequest").value;
+        testi = document.getElementsByTagName('textarea')[0]
+        var innerBefore = ((testi.innerHTML))
+        document.getElementById("var1").value = innerBefore
+        var doc = document.getElementById("postrequestform")
+        doc.submit()        
+    }
+
+    function show_hide(esp){
+        testi = document.getElementsByTagName('textarea')[0]
+        var innerBefore = ((testi.innerHTML))
+        var etsi2 = innerBefore.lastIndexOf('/id&gt')
+        var listaa = innerBefore.split(';')
+        if ( listaa.find(alkio => alkio.includes('ESP')) === undefined ){
+        lastIdTagIndex = listaa.lastIndexOf('/id&gt')
+        listaa.splice(lastIdTagIndex+1,0,'\n&ltObject&gt')
+        listaa.splice(lastIdTagIndex+2,0,'\n&ltid&gt' + esp + '&lt/id&gt' )
+        listaa.splice(lastIdTagIndex+3,0,'\n&lt/Object&gt')
+        }
+        else {
+        var stringgi = (listaa.find(alkio => alkio.includes('ESP')))
+        var index = listaa.lastIndexOf(stringgi)
+        listaa.splice(lastIdTagIndex+1,0,'\n&ltObject&gt')
+        listaa.splice(lastIdTagIndex+2,0,'\n&ltid&gt' + esp + '&lt/id&gt' )
+        listaa.splice(lastIdTagIndex+3,0,'\n&lt/Object&gt')
+       
+        }
+        testi.innerHTML = listaa.join(';')
+
+        var click = document.getElementById("drop-content-" + esp)
+        if (click.style.display === "none") {
+            click.style.display = "block";
+        } else {
+            click.style.display = "none";
+        }
+    }
+
+    function add_to_feed(esp,value){
+        testi = document.getElementsByTagName('textarea')[0]
+        var innerBefore = ((testi.innerHTML))
+        var listaa = innerBefore.split(';')
+        indexOfEsp = listaa.lastIndexOf(esp + '&lt')
+        listaa.splice(indexOfEsp+2,0,'\n&ltInfoItem name="' + value + '"/&gt' )
+        testi.innerHTML = listaa.join(';')
+    }
+    function write_newest(){
+        testi = document.getElementsByTagName('textarea')[0]
+        var innerBefore = ((testi.innerHTML))
+        var listaa = innerBefore.split(';')
+        var stringgi = (listaa.find(alkio => alkio.includes('read msgformat="odf"'))) 
+        var index =  listaa.lastIndexOf(stringgi)
+        var x = document.getElementById("myInput").value;
+        var newShit = 'read msgformat="odf" newest="'+ x + '"&gt'
+        listaa[index] = newShit
+        testi.innerHTML = listaa.join(';')
+   } 
+    </script>
+
+<!-- <div class="title"> 
+Odf read
+</div> -->
+
+<body>
+    <div class="pagecontainer">
+    <form id="postrequestform" action="{% url 'odfread' %}" method="POST" name="myform">
+
+        <div id="selectioncontainer">
+        <div class ="newestamount" > 
+        <label>Newest:</label>
+        <br><br>
+        <input type="text" id="myInput" oninput="write_newest()">
+        </div>
+
+        {% for esp in esplist %}
+        <div class="dropdown" id="{{ esp }}"> 
+            <input type="button" onClick='show_hide("{{esp}}")'> {{ esp }}</button>
+            <div class ="buttons" style="display:none;" id='drop-content-{{esp}}'> 
+                <a href="#" onClick='add_to_feed("{{esp}}","Humidity")'>Humidity</a>
+                <a href="#" onClick='add_to_feed("{{esp}}","Temperature")'>Temperature</a>
+                <a href="#" onClick='add_to_feed("{{esp}}","SoilMoisture")'>SoilMoisture</a>
+                <a href="#" onClick='add_to_feed("{{esp}}","SystemId")'>SystemId</a>
+                <a href="#" onClick='add_to_feed("{{esp}}","Luminosity")'>Luminosity</a>
+                <a href="#" onClick='add_to_feed("{{esp}}","DeviceId")'>DeviceId</a>
+                <a href="#" onClick='add_to_feed("{{esp}}","ServerTime")'>ServerTime</a>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        </div>
+
+        <div class="textarea1" >
+            <label id="label">Read request</label>
+        <textarea disabled="True" id="odfrequest">
+            <omiEnvelope xmlns="http://www.opengroup.org/xsd/omi/1.0/" version="1.0" ttl="0">
+                <read msgformat="odf">
+                  <msg>
+                    <Objects xmlns="http://www.opengroup.org/xsd/odf/1.0/">
+                        <Object>
+                            <id>{{raspid}}</id>
+                        </Object>
+                    </Objects>
+                  </msg>
+                </read>
+              </omiEnvelope>
+        </textarea> 
+        <input id="postbutton" type="button" value="Send request" onClick="addtext();"></p>
+    </div>
+
+    <form id="postrequestform" style="display: none" action="/omi/read" method="POST">
+        <input type="hidden" id="var1" name="var1" value=""/>
+      </form>
+    </td>
+    
+    <div class="textarea2" >
+        <label id="label">Response</label>
+    <td><textarea name="outputtext" readonly>
+        {{ response_message}}
+    </textarea></td>
+    </div>
+    </form>
+
+    <form id="logoutform" method="POST" action="{% url 'customuser:logout' %}">
+        {% csrf_token %}
+        <input type="hidden">
+      </form>
+</head>
+</div> 
+</body>
+</html>
+

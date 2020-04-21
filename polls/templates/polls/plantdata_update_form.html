@@ -19,12 +19,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/plants_update_form.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/plantdata_update_form.css' %}">
 
 <body>
     <div class="datacontainer">
         <div class="content">
+            <div class="pagecontent-div">
+                <div class="backbutton">
+                    <a class="backlink" href="{% url "grade" %}?return=yes">{% fa5_icon 'arrow-left' 'fa' %}</a>
+                </div>
             <div class="loginform">
+
+                
+
                 <img src="{{ form.instance.White_pic.url }}" style="max-width: 1000px;" class="img"/>  
                 <p>{{ form.instance.DeviceId }}</p> 
                 <p>{{ form.instance.ServerTime }}</p> 
@@ -35,8 +42,18 @@
                 </form>
             </div>
         </div>
+            
+
+        </div>
     </div>
+
+    <form id="logoutform" method="POST" action="{% url 'customuser:logout' %}">
+        {% csrf_token %}
+        <input type="hidden">
+      </form>
+
 </body>
+
 
 </html>
 

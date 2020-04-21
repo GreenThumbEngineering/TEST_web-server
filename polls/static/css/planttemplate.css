@@ -232,6 +232,22 @@ border: 1px solid #d4d4d4 !important;
  justify-content: center;
 }
 
+#ai-predictions-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+}
+
+.predictioncolumn {
+  flex: 1;
+  text-align: center;
+  border: 1px solid #d4d4d4 !important;
+  margin: 5px !important;
+  padding: 5px !important;
+  border-radius: .25rem;
+}
+
 
 
 
