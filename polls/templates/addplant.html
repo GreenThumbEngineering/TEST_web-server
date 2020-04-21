@@ -44,5 +44,10 @@
   </div>
 
 </div>
+
+<form id="logoutform" method="POST" action="{% url 'customuser:logout' %}">
+  {% csrf_token %}
+  <input type="hidden">
+</form>
 </body>
 

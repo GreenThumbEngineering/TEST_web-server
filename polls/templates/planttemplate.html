@@ -6,7 +6,7 @@
 
 {% fontawesome_5_static %}
 
-
+{% include 'default.html' %}
 
 <html>
 
@@ -28,30 +28,7 @@
 
 
 <body>
-  
 
-  <nav class="navbar navbar-expand-lg navbar-light gt-navbar">
-    <a class="navbar-brand brand" href="/"><img src="/static/images/greenthumb.png" class="iconimg"/> Greenthumb</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-      <ul class="navbar-nav w-100 justify-content-center">
-        <li class="nav-item active">
-          <a class="nav-link" href="/myplants">My plants</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/addplant">Add plant</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/grade">Grade plants</a>
-      </li>
-        <li class="nav-item ml-auto">         
-          <a class="nav-link" href="#" onClick="document.getElementById('logoutform').submit()">Logout</a>              
-        </li>
-      </ul>
-    </div>
-  </nav>
 
 
 <div class="maincontainer">
@@ -79,7 +56,7 @@
               <a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="false">Add water {% fa5_icon 'wpforms' 'fab' %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="ai-tab" data-toggle="tab" href="#ai" role="tab" aria-controls="ai" aria-selected="false">Predictions {% fa5_icon 'robot' 'fas' %}</a>
+              <a class="nav-link" id="ai-tab" data-toggle="tab" href="#ai" role="tab" aria-controls="ai" aria-selected="false">Analysis {% fa5_icon 'robot' 'fas' %}</a>
             </li>
           </ul>
 
@@ -128,7 +105,22 @@
 
 
             <div class="tab-pane" id="ai" role="tabpanel" aria-labelledby="ai-tab">
-              <p>We hope this might contain something one day</p>
+              <div id="ai-predictions-container">
+                <div class="predictioncolumn"><p><b>Temperature</b></p></div>
+                <div class="predictioncolumn"><p><b>Humidity</b></p></div>
+                <div class="predictioncolumn"><p><b>Soil dryness</b></p></div>
+                <div class="predictioncolumn"><p><b>Luminosity</b></p></div>
+                <div class="predictioncolumn"><p><b>VPD</b></p>
+                
+                {{ vpdAnalysis|safe }}
+                
+                </div>
+                <div class="predictioncolumn"><p><b>NDVI</p></b>
+                
+                {{ ndviAnalysis|safe }}
+                
+                </div>
+              </div>
             </div>
         </div>
 

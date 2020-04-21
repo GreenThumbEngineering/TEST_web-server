@@ -28,6 +28,7 @@ from dicttoxml import dicttoxml
 from xml.dom.minidom import parseString
 from math import exp
 from django.utils import timezone
+from read_wrapper import ReadWrapper
 
 class PlantUpdate(UpdateView):
     model = Plants
@@ -48,9 +49,28 @@ class PlantDataUpdate(UpdateView):
     
     def get_object(self, queryset=None):
         try:
-            return PlantData.objects.filter(NDVI_grade__isnull=True).order_by('ServerTime')[0]
-        except:
-            return redirect('/') 
+            if self.request.GET.get("return") and "plantdataid" in self.request.session:
+                return PlantData.objects.get(id=self.request.session["plantdataid"])
+            else: 
+                return PlantData.objects.filter(NDVI_grade__isnull=True).order_by('ServerTime')[0]
+        except (PlantData.DoesNotExist, IndexError):
+            raise Http404
+
+    def dispatch(self, request, *args, **kwargs): 
+
+        if not (self.request.user.is_authenticated):
+            raise Http404
+
+        if not self.get_object():
+            return redirect('/')
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.request.session["plantdataid"] = self.object.id
+        return HttpResponseRedirect(self.get_success_url()) 
     
 
 def frontpage(request):
@@ -71,6 +91,15 @@ def display(request, id):
 
     datas = PlantData.objects.filter(DeviceId=plantinfo.deviceid).order_by('-ServerTime')
 
+    datarow = datas[0]
+
+    problem, status, explanation, instructions = VPD.VPD.vpdAnalysis(datarow.Humidity, datarow.Temperature)
+    
+    ndviproblem, ndvistatus, ndviexplanation, ndviinstructions = VPD.VPD.ndviAnalysis(datarow.NDVI_value)
+
+    vpdAnalysis = status + explanation + instructions
+    ndviAnalysis = ndvistatus + ndviexplanation + ndviinstructions
+
     dates = []
 
     for plant in datas:
@@ -85,7 +114,37 @@ def display(request, id):
     else:
         waterform = WaterForm()
 
-    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'waterform': waterform, 'dates': dates, 'waters': waters, 'waterdates': waterdates})
+    return render(request, 'planttemplate.html', {'plantinfo': plantinfo, 'id': id, 'plantdatas': datas, 'waterform': waterform, 'dates': dates, 'waters': waters, 'waterdates': waterdates, 'vpdAnalysis': vpdAnalysis, 'ndviAnalysis': ndviAnalysis})
+
+
+@csrf_exempt
+def odfread(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            plants = Plants.objects.filter(user=request.user.id).order_by('nickname')
+            stringgi = request.POST.get("var1")
+            stringgi2= stringgi.replace('&lt;','<')
+            stringgi3 = stringgi2.replace('&gt;','>')
+            ESP_list = []
+            for plant in plants:
+                ESP_list.append(plant.deviceid)
+            rasp_id = PlantData.objects.values('SystemId')
+            RASP = (rasp_id[0]['SystemId'])
+            try:
+                omi_read_response = ReadWrapper.main(stringgi3)
+                response_message = f'''{omi_read_response}'''
+                return render(request, 'odfread.html', {'esplist': ESP_list, 'raspid': RASP, 'response_message': response_message})
+            except:
+                return redirect('/odfread')
+        else:
+            plants = Plants.objects.filter(user=request.user.id).order_by('nickname')
+            ESP_list = []
+            for plant in plants:
+                ESP_list.append(plant.deviceid)
+            rasp_id = PlantData.objects.values('SystemId')
+            RASP = (rasp_id[0]['SystemId'])
+            return render(request, 'odfread.html', {'esplist': ESP_list, 'raspid':RASP } )
+
 
 @csrf_exempt
 def postdata(request):
@@ -148,12 +207,12 @@ def myplants(request):
                 # 1 equals VPD problem
                 # 2 equals problem with database or RASP connection
 
-                #status, statustext = VPD.analyze(datarow.Temperature, datarow.Humidity)
+                problem, status, explanation, instructions = VPD.VPD.vpdAnalysis(datarow.Humidity, datarow.Temperature)
 
                 if datarow.ServerTime < time_threshold:
                     plantswithdata.append([plant, datarow, "2", "DB problem"])
-                #elif status: #If VPD analysis returns problematic values
-                    #plantswithdata.append([plant, datarow, "1", statustext])
+                elif problem: #If VPD analysis returns problematic values
+                    plantswithdata.append([plant, datarow, "1", status + explanation + instructions])
                 else:
                     plantswithdata.append([plant, datarow, "0", "Status OK"])
 
