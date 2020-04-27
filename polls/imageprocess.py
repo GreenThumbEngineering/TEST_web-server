@@ -28,7 +28,7 @@ def crop(img, pos, name):
     
     imwrite('./polls/media/images/' + str(name) + '.jpg', crop_img)
 
-def segmentation(imgW, imgNIR, shape):
+def segmentation(imgW, imgNIR, shape, DeviceId, timestamp):
 
     s_threshold = 165
     b_threshold = 200
@@ -103,9 +103,10 @@ def segmentation(imgW, imgNIR, shape):
     filled_mask = pcv.fill_holes(mask)
 
     final = pcv.apply_mask(img=imgNIR, mask=mask, mask_color='white')
+    pcv.print_image(final, "./polls/segment/" + str(DeviceId) + "_" + str(timestamp.strftime("%Y-%m-%d_%H-%M-%S")) + "_segment" + ".png")
     pcv.print_image(final, "./polls/segment/segment-temp.png")
 
-def NDVI(segmented):
+def NDVI(segmented, DeviceId, timestamp):
     colors = np.load('./polls/colors.npy', allow_pickle=True)
     #img = Image.open('./output/final.png').convert("RGB")
     #img = cv2.imread('./segment/segment-temp.png')
@@ -138,19 +139,19 @@ def NDVI(segmented):
     fastiecm=LinearSegmentedColormap.from_list('mylist', colors)
 
     #saves the final NDVI calculated image
-    plt.imsave("./polls/ndvi-calculated/%.4f.jpg" % (sumAll/float(amount)),arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
+    plt.imsave("./polls/ndvi-calculated/" + str(DeviceId) + "_" + str(timestamp.strftime("%Y-%m-%d_%H-%M-%S")) + "_" +  "%.4f.jpg" % (sumAll/float(amount)),arrNDVI,cmap=fastiecm, vmin=-1.0, vmax=1.0)
     
     return sumAll/float(amount)
 
-def main(imgW, imgNIR):
+def main(imgW, imgNIR, DeviceId, timestamp):
     #Crops both pics here
     #Segments image, gets mask from cropW, and applies it to cropNIR
 
     shape = imread(imgW).shape[:2]
-    segmentation(imgW, imgNIR, shape=shape)
+    segmentation(imgW, imgNIR, shape, DeviceId, timestamp)
 
     #NDVI from segmented image
-    ndvi = NDVI('./polls/segment/segment-temp.png')
+    ndvi = NDVI('./polls/segment/segment-temp.png', DeviceId, timestamp)
 
     return ndvi
 

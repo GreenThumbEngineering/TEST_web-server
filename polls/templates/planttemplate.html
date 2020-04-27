@@ -35,7 +35,9 @@
   
     <div id="imagecontainer" class="imagecontainer">
         {% if plantinfo.plant_pic %}
-        <img src="{{ plantinfo.plant_pic.url }}" style="max-width: 600px;" class="img"/>    
+        <img src="{{ plantinfo.plant_pic.url }}" style="max-width: 600px;" class="img"/>
+        {% elif plantdatas.first %}
+        <img src="{{ plantdatas.first.White_pic.url }}" style="max-width: 600px;" class="img"/>    
         {% else %}
         <img src="/static/images/plant2.jpg" style="max-width: 600px;" class="img"/>    
         {% endif %}
@@ -73,6 +75,7 @@
                     <th scope="col">Humidity</th>
                     <th scope="col">Soil dryness</th>                    
                     <th scope="col">Luminosity</th>
+                    <th scope="col">NDVI</th>
                     <th scope="col">VPD</th>
                   </tr>
                   </thead>
@@ -85,6 +88,7 @@
                     <td>{{ datarow.Humidity }}</td>
                     <td>{{ datarow.SoilMoisture }}</td>                   
                     <td>{{ datarow.Luminosity }}</td>
+                    <td>{{ datarow.NDVI_value|floatformat:"-3" }}</td>
                     <td>{{ datarow.VPD|floatformat:"-2" }}</td>
                   </tr>
                   {% endfor %}
