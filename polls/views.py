@@ -174,7 +174,7 @@ def postdata(request):
                     plantData.save()
 
 
-                ndvi = process.main(settings.BASE_DIR + "/polls" + plantData.White_pic.url, settings.BASE_DIR + "/polls" + plantData.Nir_pic.url)              
+                ndvi = process.main(settings.BASE_DIR + "/polls" + plantData.White_pic.url, settings.BASE_DIR + "/polls" + plantData.Nir_pic.url, plantData.DeviceId, plantData.ServerTime)              
                 plantData.NDVI_value = ndvi
 
                 plantData.save()

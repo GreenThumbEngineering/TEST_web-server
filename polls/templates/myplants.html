@@ -73,6 +73,7 @@
 						<span class="valueicons">{% fa5_icon 'wind' 'fas' %}</span>
 						<span class="valueicons">{% fa5_icon 'tint' 'fas' %}</span>
 						<span class="valueicons">{% fa5_icon 'sun' 'fas' %}</span>
+						<span class="valueicons">{% fa5_icon 'seedling' 'fas' %}</span>
 				
 					</div>
 
@@ -82,6 +83,7 @@
 						<span class="values">{{ plant.1.Humidity }} %</span>
 						<span class="values">{{ plant.1.SoilMoisture }}</span>
 						<span class="values">{{ plant.1.Luminosity }}</span>
+						<span class="values">{{ plant.1.NDVI_value|floatformat:"-2" }}</span>
 
 					</div>
 

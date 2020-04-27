@@ -134,7 +134,6 @@ class VPD:
             tooHighRange = vpd > 1.6
             tooLowRange = vpd < 0.8
 
-            print(vpd)
             if optimalRange:
                 # "Temp = {}, Hum = {}, VPD = {}.".format(temperature, humidity, vpd)
                 return(False, optimalStatusText, generalExplanation, optimalInstructions)
